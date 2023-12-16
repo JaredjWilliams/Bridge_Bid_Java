@@ -17,6 +17,9 @@ public class HandTests {
     List<Card> cards = List.of(Card.TWO_CLUBS, Card.THREE_CLUBS, Card.FOUR_CLUBS, Card.FIVE_CLUBS);
     List<Card> mockHighCardPoints = List.of(Card.ACE_CLUBS, Card.JACK_CLUBS, Card.QUEEN_CLUBS);
     // The card passed as the parameter is added to the hand.
+    List<Card> mockFullHand = List.of(Card.FOUR_DIAMONDS, Card.TWO_HEARTS, Card.SIX_HEARTS, Card.ACE_DIAMONDS,
+            Card.KING_HEARTS, Card.TEN_HEARTS, Card.THREE_SPADES, Card.NINE_DIAMONDS, Card.THREE_CLUBS,
+            Card.JACK_SPADES, Card.QUEEN_DIAMONDS, Card.SIX_DIAMONDS, Card.FIVE_CLUBS);
     @Test
     public void testAddCard() {
         Hand hand = new Hand(cards);
@@ -42,6 +45,38 @@ public class HandTests {
         hand.calculateHCP();
 
         assertEquals(7, hand.getHighCardPoints());
-        
+    }
+
+    // When calculateDistributionPoints() is called
+    // increments the distribution points to the amount found.
+
+    @Test
+    public void testCalculateDistributionPoints() {
+        Hand hand = new Hand(mockFullHand);
+        hand.calculateDistributionPoints();
+
+        assertEquals(2, hand.getDistributionPoints());
+    }
+
+    // When calculateKings() is called
+    // sets kings to the number calculated
+
+    @Test
+    public void testCalculateKings() {
+        Hand hand = new Hand(mockFullHand);
+        hand.calculateKings();
+
+        assertEquals(1, hand.getKings());
+    }
+
+    // When calculateAces() is called
+    // sets aces to the number calculated
+
+    @Test
+    public void testCalculateAces() {
+        Hand hand = new Hand(mockFullHand);
+        hand.calculateAces();
+
+        assertEquals(1, hand.getAces());
     }
 }

@@ -38,6 +38,7 @@ public class Hand {
 
     private void updatePointCounts() {
         calculateHCP();
+        calculateDistributionPoints();
         calculateTotalPoints();
     }
 
@@ -55,6 +56,47 @@ public class Hand {
         }
 
         highCardPoints = total;
+    }
+
+    public void calculateDistributionPoints() {
+        int total = 0;
+
+        List<Long> distributions = List.of(
+                cards.stream().filter(card -> card.getSuit() == Suit.CLUBS).count(),
+                cards.stream().filter(card -> card.getSuit() == Suit.DIAMONDS).count(),
+                cards.stream().filter(card -> card.getSuit() == Suit.HEARTS).count(),
+                cards.stream().filter(card -> card.getSuit() == Suit.SPADES).count()
+        );
+
+        for (Long distribution : distributions) {
+            switch (distribution.intValue()) {
+                case 0 -> total += 3;
+                case 1 -> total += 2;
+                case 2 -> total += 1;
+            }
+        }
+
+        distributionPoints = total;
+    }
+
+    public void calculateKings() {
+        long total = cards.stream().filter(card ->
+                card == Card.KING_DIAMONDS ||
+                card == Card.KING_CLUBS ||
+                card == Card.KING_HEARTS ||
+                card == Card.KING_SPADES).count();
+
+        kings = (int) total;
+    }
+
+    public void calculateAces() {
+        long total = cards.stream().filter(card ->
+                card == Card.ACE_DIAMONDS ||
+                        card == Card.ACE_CLUBS ||
+                        card == Card.ACE_HEARTS ||
+                        card == Card.ACE_SPADES).count();
+
+        aces = (int) total;
     }
 
     private void calculateTotalPoints() {

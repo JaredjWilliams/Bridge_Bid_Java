@@ -29,7 +29,9 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
 
         setContentView(R.layout.activity_card_selection);
         setupViews();
+
         updateCardGrid(currentSuit, false);
+        createSuitSelectionImages();
     }
 
     private void setupViews() {
@@ -38,6 +40,26 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
         totalPointCounterTextView = findViewById(R.id.total_point_counter);
     }
 
+    private void createSuitSelectionImages() {
+        suitSelectionImage(R.id.club_suit, R.drawable.card_suit_clubs, Suit.CLUBS);
+        suitSelectionImage(R.id.diamond_suit, R.drawable.card_suit_diamonds, Suit.DIAMONDS);
+        suitSelectionImage(R.id.heart_suit, R.drawable.card_suit_heats, Suit.HEARTS);
+        suitSelectionImage(R.id.spade_suit, R.drawable.card_suit_spades, Suit.SPADES);
+    }
+
+    private void suitSelectionImage(int id, int image, Suit suit) {
+        ImageView suitImage = findViewById(id);
+
+        suitImage.setImageResource(image);
+        suitImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateCardGrid(suit, true);
+            }
+        });
+    }
+
+    @Override
     public void updateCardGrid(Suit suit, boolean update) {
         ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(324, 424);
         params.setMargins(10, 10, 10, 10);
