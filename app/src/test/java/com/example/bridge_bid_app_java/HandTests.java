@@ -42,5 +42,6 @@ public class HandTests {
         hand.calculateHCP();
 
         assertEquals(7, hand.getHighCardPoints());
+        
     }
 }
