@@ -29,14 +29,8 @@ public class CardSelectionPresenter {
         }
 
         view.setCardCounterTextView(hand.getCards().size());
-        view.setTotalPointCounter(hand.getHighCardPoints());
+        view.setTotalPointCounter(hand.getTotalPointCount());
 
         return cardImage;
-    }
-
-    private void addCardToHand() {
-    }
-
-    private void removeCardFromHand() {
     }
 }
