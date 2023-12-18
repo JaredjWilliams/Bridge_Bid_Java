@@ -1,11 +1,7 @@
 package com.example.bridge_bid_app_java.playing_cards;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -15,8 +11,17 @@ public class Hand {
     private int totalPointCount;
     private int distributionPoints;
     private int highCardPoints;
+    private int clubs;
+    private int diamonds;
+    private int hearts;
+    private int spades;
     private int aces;
     private int kings;
+
+    private boolean canOpen;
+    private boolean canBidTwoLevel;
+    private boolean canBidThreeLevel;
+    private boolean canRespond;
 
     public Hand() {
 
@@ -24,6 +29,7 @@ public class Hand {
 
     public Hand(List<Card> cards) {
         this.cards.addAll(cards);
+        updatePointCounts();
     }
 
     public void addCard(Card card) {
@@ -40,6 +46,11 @@ public class Hand {
         calculateHCP();
         calculateDistributionPoints();
         calculateTotalPoints();
+        calculateKings();
+        calculateAces();
+        calculateSuits();
+        updateCanOpen(totalPointCount);
+        updateCanBidTwoLevel(totalPointCount);
     }
 
     public void calculateHCP() {
@@ -47,15 +58,37 @@ public class Hand {
 
         for (Card card: cards) {
             switch (card) {
-                case JACK_CLUBS -> total++;
-                case QUEEN_CLUBS -> total += 2;
-                case KING_CLUBS -> total += 3;
-                case ACE_CLUBS -> total += 4;
+                case JACK_CLUBS, JACK_DIAMONDS, JACK_HEARTS, JACK_SPADES -> total++;
+                case QUEEN_CLUBS, QUEEN_DIAMONDS, QUEEN_HEARTS, QUEEN_SPADES -> total += 2;
+                case KING_CLUBS, KING_DIAMONDS, KING_HEARTS, KING_SPADES -> total += 3;
+                case ACE_CLUBS, ACE_DIAMONDS, ACE_HEARTS, ACE_SPADES -> total += 4;
                 default -> { }
             }
         }
 
         highCardPoints = total;
+    }
+
+    public void calculateSuits() {
+        int clubs = 0;
+        int diamonds = 0;
+        int hearts = 0;
+        int spades = 0;
+
+        for (Card card: cards) {
+            switch (card.getSuit()) {
+                case CLUBS -> clubs++;
+                case DIAMONDS -> diamonds++;
+                case HEARTS -> hearts++;
+                case SPADES -> spades++;
+                default -> { }
+            }
+        }
+
+        this.clubs = clubs;
+        this.diamonds = diamonds;
+        this.hearts = hearts;
+        this.spades = spades;
     }
 
     public void calculateDistributionPoints() {
@@ -99,6 +132,15 @@ public class Hand {
         aces = (int) total;
     }
 
+    public void updateCanOpen(int totalPointCount) {
+        canOpen = totalPointCount > 12;
+    }
+
+    public void updateCanBidTwoLevel(int totalPointCount) {
+        canBidTwoLevel = totalPointCount > 10;
+    }
+
+
     private void calculateTotalPoints() {
         totalPointCount = highCardPoints + distributionPoints;
     }
@@ -128,4 +170,37 @@ public class Hand {
         return cards;
     }
 
+    public int getCardsLength() { return cards.size(); }
+
+    public int getClubs() {
+        return clubs;
+    }
+
+    public int getDiamonds() {
+        return diamonds;
+    }
+
+    public int getHearts() {
+        return hearts;
+    }
+
+    public int getSpades() {
+        return spades;
+    }
+
+    @Override
+    public String toString() {
+        return "Hand{" +
+                "cards=" + cards +
+                ", totalPointCount=" + totalPointCount +
+                ", distributionPoints=" + distributionPoints +
+                ", highCardPoints=" + highCardPoints +
+                ", clubs=" + clubs +
+                ", diamonds=" + diamonds +
+                ", hearts=" + hearts +
+                ", spades=" + spades +
+                ", aces=" + aces +
+                ", kings=" + kings +
+                '}';
+    }
 }

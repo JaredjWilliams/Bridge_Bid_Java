@@ -9,4 +9,8 @@ public interface CardSelectionInterface {
     void setCardCounterTextView(int count);
 
     void setTotalPointCounter(int count);
+
+    void enabledNextButton(boolean isEnabled);
+
+    void setCardCounterColor(String color);
 }

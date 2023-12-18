@@ -16,10 +16,11 @@ public class HandTests {
 
     List<Card> cards = List.of(Card.TWO_CLUBS, Card.THREE_CLUBS, Card.FOUR_CLUBS, Card.FIVE_CLUBS);
     List<Card> mockHighCardPoints = List.of(Card.ACE_CLUBS, Card.JACK_CLUBS, Card.QUEEN_CLUBS);
-    // The card passed as the parameter is added to the hand.
     List<Card> mockFullHand = List.of(Card.FOUR_DIAMONDS, Card.TWO_HEARTS, Card.SIX_HEARTS, Card.ACE_DIAMONDS,
             Card.KING_HEARTS, Card.TEN_HEARTS, Card.THREE_SPADES, Card.NINE_DIAMONDS, Card.THREE_CLUBS,
             Card.JACK_SPADES, Card.QUEEN_DIAMONDS, Card.SIX_DIAMONDS, Card.FIVE_CLUBS);
+
+    // The card passed as the parameter is added to the hand.
     @Test
     public void testAddCard() {
         Hand hand = new Hand(cards);

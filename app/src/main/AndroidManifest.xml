@@ -31,6 +31,10 @@
 
         </activity>
 
+        <activity android:name=".bid_selection.BidSelectionActivity"
+            android:label=""
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

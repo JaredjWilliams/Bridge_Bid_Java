@@ -1,51 +1,103 @@
 package com.example.bridge_bid_app_java.card_selection;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.bridge_bid_app_java.R;
+import com.example.bridge_bid_app_java.bid_selection.BidSelectionActivity;
+import com.example.bridge_bid_app_java.game.Player;
 import com.example.bridge_bid_app_java.playing_cards.Card;
 import com.example.bridge_bid_app_java.playing_cards.Suit;
 
 public class CardSelectionActivity extends AppCompatActivity implements CardSelectionInterface {
 
     CardSelectionPresenter presenter = new CardSelectionPresenter(this);
-    private TextView cardCounterTextView;
+    private final Suit currentSuit = Suit.CLUBS;
+
     private TextView totalPointCounterTextView;
+    private RadioButton rightOpponentButton;
+    private RadioButton leftOpponentButton;
+    private TextView cardCounterTextView;
+    private RadioButton partnerButton;
+    private RadioButton userButton;
     private GridLayout cardGrid;
-    private Suit currentSuit = Suit.CLUBS;
+
+    private Button nextButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
 
         setContentView(R.layout.activity_card_selection);
         setupViews();
 
         updateCardGrid(currentSuit, false);
         createSuitSelectionImages();
+        createRadioButtons();
+        createNextButton();
     }
 
     private void setupViews() {
-        cardGrid = findViewById(R.id.card_selection);
-        cardCounterTextView = findViewById(R.id.card_counter);
         totalPointCounterTextView = findViewById(R.id.total_point_counter);
+        rightOpponentButton = findViewById(R.id.right_opp_radio_button);
+        leftOpponentButton = findViewById(R.id.left_opp_radio_button);
+        partnerButton = findViewById(R.id.partner_radio_button);
+        cardCounterTextView = findViewById(R.id.card_counter);
+        userButton = findViewById(R.id.user_radio_button);
+        cardGrid = findViewById(R.id.card_selection);
+        nextButton = findViewById(R.id.next_button);
     }
 
     private void createSuitSelectionImages() {
-        suitSelectionImage(R.id.club_suit, R.drawable.card_suit_clubs, Suit.CLUBS);
         suitSelectionImage(R.id.diamond_suit, R.drawable.card_suit_diamonds, Suit.DIAMONDS);
-        suitSelectionImage(R.id.heart_suit, R.drawable.card_suit_heats, Suit.HEARTS);
         suitSelectionImage(R.id.spade_suit, R.drawable.card_suit_spades, Suit.SPADES);
+        suitSelectionImage(R.id.heart_suit, R.drawable.card_suit_heats, Suit.HEARTS);
+        suitSelectionImage(R.id.club_suit, R.drawable.card_suit_clubs, Suit.CLUBS);
     }
+
+    private void createRadioButtons() {
+        createRadioButton(rightOpponentButton, Player.RIGHT_OPPONENT);
+        createRadioButton(leftOpponentButton, Player.LEFT_OPPONENT);
+        createRadioButton(partnerButton, Player.PARTNER);
+        createRadioButton(userButton, Player.USER);
+    }
+
+    private void createNextButton() {
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.updateHand();
+                startBidActivity();
+            }
+        });
+    }
+
+    private void startBidActivity() {
+        Intent bidSelectionActivity = new Intent(this, BidSelectionActivity.class);
+        bidSelectionActivity.putExtra("gameObjectAsString", presenter.gameToGSON(presenter.getGame()));
+        startActivity(bidSelectionActivity);
+    }
+
+    private void createRadioButton(RadioButton button, Player player) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.updateDealer(player);
+                presenter.updateNextButton(presenter.getHand(), presenter.getGame().getDealer());
+            }
+        });
+    }
+
 
     private void suitSelectionImage(int id, int image, Suit suit) {
         ImageView suitImage = findViewById(id);
@@ -98,9 +150,16 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
     public void setCardCounterTextView(int count) {
         cardCounterTextView.setText("Cards Selected: " + count);
     }
-
     @Override
     public void setTotalPointCounter(int count) {
         totalPointCounterTextView.setText("Current Points: " + count);
+    }
+    @Override
+    public void enabledNextButton(boolean isEnabled) {
+        nextButton.setEnabled(isEnabled);
+    }
+    @Override
+    public void setCardCounterColor(String color) {
+        cardCounterTextView.setTextColor(Color.parseColor(color));
     }
 }
