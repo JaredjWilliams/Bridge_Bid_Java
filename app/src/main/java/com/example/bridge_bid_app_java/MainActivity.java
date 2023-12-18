@@ -2,25 +2,14 @@ package com.example.bridge_bid_app_java;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.bridge_bid_app_java.card_selection.CardSelectionActivity;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
-
-import androidx.core.view.WindowCompat;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.bridge_bid_app_java.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
+import com.example.bridge_bid_app_java.card_selection.CardSelectionActivity;
 
 public class MainActivity extends AppCompatActivity {
 
