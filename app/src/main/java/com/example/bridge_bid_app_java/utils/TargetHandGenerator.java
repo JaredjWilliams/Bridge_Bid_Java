@@ -29,11 +29,77 @@ public class TargetHandGenerator {
         return hand;
     }
 
+    private static List<Card> fillRandomHand(List<Card> preselectedCards) {
+        List<Card> hand = new ArrayList<>(preselectedCards);
+        List<Card> cards = new ArrayList<>(Arrays.asList(Card.values()));
+        cards.removeAll(preselectedCards);
+        Random random = new Random();
+        int bound = cards.size();
+
+        while (hand.size() != 13) {
+            int n = random.nextInt(bound);
+            Card card = cards.get(n);
+            cards.remove(card);
+            card.isSelected(true);
+            hand.add(card);
+            bound--;
+        }
+
+        return hand;
+    }
+
+    private static List<Card> fillRandomHandWithout(List<Card> preselectedCards) {
+        List<Card> hand = new ArrayList<>();
+        List<Card> cards = new ArrayList<>(Arrays.asList(Card.values()));
+        cards.removeAll(preselectedCards);
+        Random random = new Random();
+        int bound = cards.size();
+
+        while (hand.size() != 13) {
+            int n = random.nextInt(bound);
+            Card card = cards.get(n);
+            cards.remove(card);
+            card.isSelected(true);
+            hand.add(card);
+            bound--;
+        }
+
+        return hand;
+    }
+
+    public static Hand createTargetedHandWithout(int totalPoints, int spades, int hearts, int diamonds, int clubs, List<Card> cards) {
+        Hand hand;
+
+        do {
+            hand = new Hand(fillRandomHandWithout(cards));
+        } while (hand.getTotalPointCount() != totalPoints ||
+                hand.getSpades() != spades ||
+                hand.getHearts() != hearts ||
+                hand.getDiamonds() != diamonds ||
+                hand.getClubs() != clubs);
+
+        return hand;
+    }
+
     public static Hand createTargetedHand(int totalPoints, int spades, int hearts, int diamonds, int clubs) {
         Hand hand;
 
         do {
             hand = new Hand(createRandomHand());
+        } while (hand.getTotalPointCount() != totalPoints ||
+                hand.getSpades() != spades ||
+                hand.getHearts() != hearts ||
+                hand.getDiamonds() != diamonds ||
+                hand.getClubs() != clubs);
+
+        return hand;
+    }
+
+    public static Hand createTargetedHand(int totalPoints, int spades, int hearts, int diamonds, int clubs, List<Card> cards) {
+        Hand hand;
+
+        do {
+            hand = new Hand(fillRandomHand(cards));
         } while (hand.getTotalPointCount() != totalPoints ||
                 hand.getSpades() != spades ||
                 hand.getHearts() != hearts ||

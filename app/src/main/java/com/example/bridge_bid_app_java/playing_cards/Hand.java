@@ -1,6 +1,7 @@
 package com.example.bridge_bid_app_java.playing_cards;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,14 @@ public class Hand {
     private int totalPointCount;
     private int distributionPoints;
     private int highCardPoints;
+    private HashMap<Suit, Integer> heartStoppers = new HashMap<>();
+    private HashMap<Suit, Integer> spadeStoppers = new HashMap<>();
+    private HashMap<Suit, Integer> diamondStoppers = new HashMap<>();
+    private HashMap<Suit, Integer> clubStoppers = new HashMap<>();
+    private int highSpades;
+    private int highHearts;
+    private int highDiamonds;
+    private int highClubs;
     private int clubs;
     private int diamonds;
     private int hearts;
@@ -51,6 +60,11 @@ public class Hand {
         calculateSuits();
         updateCanOpen(totalPointCount);
         updateCanBidTwoLevel(totalPointCount);
+        calculateHighSpades();
+        calculateHighHearts();
+        calculateHighDiamonds();
+        calculateHighClubs();
+        calculateStoppers();
     }
 
     public void calculateHCP() {
@@ -69,26 +83,18 @@ public class Hand {
         highCardPoints = total;
     }
 
+    public void calculateStoppers() {
+        spadeStoppers.put(Suit.SPADES, (int) cards.stream().filter(card -> card == Card.ACE_SPADES || card == Card.KING_SPADES).count());
+        heartStoppers.put(Suit.HEARTS, (int) cards.stream().filter(card -> card == Card.ACE_HEARTS || card == Card.KING_HEARTS).count());
+        diamondStoppers.put(Suit.DIAMONDS, (int) cards.stream().filter(card -> card == Card.ACE_DIAMONDS || card == Card.KING_DIAMONDS).count());
+        clubStoppers.put(Suit.CLUBS, (int) cards.stream().filter(card -> card == Card.ACE_CLUBS || card == Card.KING_CLUBS).count());
+    }
+
     public void calculateSuits() {
-        int clubs = 0;
-        int diamonds = 0;
-        int hearts = 0;
-        int spades = 0;
-
-        for (Card card: cards) {
-            switch (card.getSuit()) {
-                case CLUBS -> clubs++;
-                case DIAMONDS -> diamonds++;
-                case HEARTS -> hearts++;
-                case SPADES -> spades++;
-                default -> { }
-            }
-        }
-
-        this.clubs = clubs;
-        this.diamonds = diamonds;
-        this.hearts = hearts;
-        this.spades = spades;
+        clubs = (int) cards.stream().filter(card -> card.getSuit() == Suit.CLUBS).count();
+        diamonds = (int) cards.stream().filter(card -> card.getSuit() == Suit.DIAMONDS).count();
+        hearts = (int) cards.stream().filter(card -> card.getSuit() == Suit.HEARTS).count();
+        spades = (int) cards.stream().filter(card -> card.getSuit() == Suit.SPADES).count();
     }
 
     public void calculateDistributionPoints() {
@@ -112,24 +118,57 @@ public class Hand {
         distributionPoints = total;
     }
 
+    public void calculateHighSpades() {
+        highSpades = (int) cards.stream().filter(card ->
+                card == Card.ACE_SPADES ||
+                card == Card.KING_SPADES ||
+                card == Card.QUEEN_SPADES ||
+                card == Card.JACK_SPADES ||
+                card == Card.TEN_SPADES).count();
+    }
+
+    public void calculateHighHearts() {
+        highHearts = (int) cards.stream().filter(card ->
+                card == Card.ACE_HEARTS ||
+                        card == Card.KING_HEARTS ||
+                        card == Card.QUEEN_HEARTS ||
+                        card == Card.JACK_HEARTS ||
+                        card == Card.TEN_HEARTS).count();
+    }
+
+    public void calculateHighDiamonds() {
+        highDiamonds = (int) cards.stream().filter(card ->
+                card == Card.ACE_DIAMONDS ||
+                        card == Card.KING_DIAMONDS ||
+                        card == Card.QUEEN_DIAMONDS ||
+                        card == Card.JACK_DIAMONDS ||
+                        card == Card.TEN_DIAMONDS).count();
+    }
+
+    public void calculateHighClubs() {
+        highClubs = (int) cards.stream().filter(card ->
+                card == Card.ACE_CLUBS ||
+                        card == Card.KING_CLUBS ||
+                        card == Card.QUEEN_CLUBS ||
+                        card == Card.JACK_CLUBS ||
+                        card == Card.TEN_CLUBS).count();
+    }
+
+
     public void calculateKings() {
-        long total = cards.stream().filter(card ->
+        kings = (int) cards.stream().filter(card ->
                 card == Card.KING_DIAMONDS ||
                 card == Card.KING_CLUBS ||
                 card == Card.KING_HEARTS ||
                 card == Card.KING_SPADES).count();
-
-        kings = (int) total;
     }
 
     public void calculateAces() {
-        long total = cards.stream().filter(card ->
+        aces = (int) cards.stream().filter(card ->
                 card == Card.ACE_DIAMONDS ||
                         card == Card.ACE_CLUBS ||
                         card == Card.ACE_HEARTS ||
                         card == Card.ACE_SPADES).count();
-
-        aces = (int) total;
     }
 
     public void updateCanOpen(int totalPointCount) {
@@ -140,11 +179,9 @@ public class Hand {
         canBidTwoLevel = totalPointCount > 10;
     }
 
-
     private void calculateTotalPoints() {
         totalPointCount = highCardPoints + distributionPoints;
     }
-
 
     public int getTotalPointCount() {
         return totalPointCount;
@@ -186,6 +223,38 @@ public class Hand {
 
     public int getSpades() {
         return spades;
+    }
+
+    public HashMap<Suit, Integer> getHeartStoppers() {
+        return heartStoppers;
+    }
+
+    public HashMap<Suit, Integer> getSpadeStoppers() {
+        return spadeStoppers;
+    }
+
+    public HashMap<Suit, Integer> getDiamondStoppers() {
+        return diamondStoppers;
+    }
+
+    public HashMap<Suit, Integer> getClubStoppers() {
+        return clubStoppers;
+    }
+
+    public int getHighSpades() {
+        return highSpades;
+    }
+
+    public int getHighHearts() {
+        return highHearts;
+    }
+
+    public int getHighDiamonds() {
+        return highDiamonds;
+    }
+
+    public int getHighClubs() {
+        return highClubs;
     }
 
     @Override

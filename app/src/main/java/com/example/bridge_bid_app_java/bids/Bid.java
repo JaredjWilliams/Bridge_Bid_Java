@@ -1,5 +1,7 @@
 package com.example.bridge_bid_app_java.bids;
 
+import static com.example.bridge_bid_app_java.utils.BidHelperFunctions.isStopperHeldInUnbidSuits;
+
 import com.example.bridge_bid_app_java.game.BidSelection;
 import com.example.bridge_bid_app_java.game.Game;
 import com.example.bridge_bid_app_java.game.Player;
@@ -39,37 +41,99 @@ public class Bid {
     }
 
     public BidSelection respondToPartnerBid() {
-        if (didPartnerBid(BidSelection.ONE_CLUBS)) {
-            return respondToOneClubBid();
+        return switch (bidSelection) {
+            case ONE_CLUB, ONE_DIAMONDS -> respondToOneClubOneDiamondBid();
+            case ONE_HEARTS -> respondToOneHeartBid();
+            default -> BidSelection.PASS;
+        };
+    }
+
+    private BidSelection respondToOneHeartBid() {
+        if (isTotalPointsGreaterOrEqualTo(10) && isSpadesEqualTo(5) &&
+                isHeartsLessThan(2) && isHeartsLessThan(2)) {
+            return BidSelection.TWO_SPADES;
         }
+        if (isTotalPointsGreaterOrEqualTo(6) && isSpadesEqualTo(6) &&
+                isHighHeartLessThan(2) && isHeartsLessThan(2)) {
+            return BidSelection.TWO_SPADES;
+        }
+        if (isTotalPointsGreaterOrEqualTo(6) && isHeartsGreaterThan(1)
+                && isHighHeartsGreaterThan(1)) {
+            return BidSelection.TWO_HEARTS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) && isHighHeartLessThan(2) &&
+                isHeartsLessThan(2) && isDiamondAmount(List.of(5, 6))) {
+            return BidSelection.TWO_DIAMOND;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) && isHighHeartLessThan(2) &&
+                isHeartsLessThan(2) && isClubAmount(List.of(5, 6))) {
+            return BidSelection.TWO_CLUBS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(6) && is4432or4441Split() &&
+                isHighHeartLessThan(2) && isHeartsLessThan(2)) {
+            return BidSelection.ONE_NO_TRUMPS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(6) && isSpadesEqualTo(5) && isHighHeartLessThan(2) && isHeartsLessThan(2)) {
+            return BidSelection.ONE_SPADES;
+        }
+
 
         return BidSelection.PASS;
     }
 
-    public BidSelection respondToOneClubBid() {
-        if (isTotalPointsGreaterOrEqualTo(13))
-        if (isTotalPointsGreaterOrEqualTo(10) && isSpadesEqualTo(6)) {
+    private BidSelection respondToOneClubOneDiamondBid() {
+        if (isTotalPointsGreaterOrEqualTo(10) && isSpadesEqualTo(8) && isOrdinalGreater(BidSelection.FOUR_SPADES)) {
+            return BidSelection.FOUR_SPADES;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) && isHeartsEqualTo(8) && isOrdinalGreater(BidSelection.FOUR_HEARTS)) {
+            return BidSelection.FOUR_HEARTS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) && isDiamondsEqualTo(8) && isOrdinalGreater(BidSelection.FIVE_DIAMONDS)) {
+            return BidSelection.FIVE_DIAMONDS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) && isClubsEqualTo(8) && isOrdinalGreater(BidSelection.FIVE_CLUBS)) {
+            return BidSelection.FIVE_CLUBS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(16) && is4432or4441Split() && isOrdinalGreater(BidSelection.THREE_NO_TRUMP)) {
+            return BidSelection.THREE_NO_TRUMP;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) && isSpadesEqualTo(7) && isOrdinalGreater(BidSelection.THREE_SPADES)) {
+            return BidSelection.THREE_SPADES;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) && isHeartsEqualTo(7) && isOrdinalGreater(BidSelection.THREE_HEARTS)) {
+            return BidSelection.THREE_HEARTS;
+        }
+        if (isTotalPointsEqualsTo(10) && isDiamondsEqualTo(7) && isOrdinalGreater(BidSelection.THREE_DIAMONDS)) {
+            return BidSelection.THREE_DIAMONDS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) && isClubsEqualTo(7) && isOrdinalGreater(BidSelection.THREE_CLUBS)) {
+            return BidSelection.THREE_CLUBS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(13) && isStopperHeldInUnbidSuits(game) && isOrdinalGreater(BidSelection.TWO_NO_TRUMP)) {
+            return BidSelection.TWO_NO_TRUMP;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) && isSpadesEqualTo(6) && isOrdinalGreater(BidSelection.TWO_SPADES)) {
             return BidSelection.TWO_SPADES;
         }
-        if (isTotalPointsGreaterOrEqualTo(10) && isHeartsEqualTo(6)) {
+        if (isTotalPointsGreaterOrEqualTo(10) && isHeartsEqualTo(6) && isOrdinalGreater(BidSelection.TWO_HEARTS)) {
             return BidSelection.TWO_HEARTS;
         }
-        if (isTotalPointsGreaterOrEqualTo(10) && isDiamondsEqualTo(6)) {
+        if (isTotalPointsGreaterOrEqualTo(10) && isDiamondsEqualTo(6) && isOrdinalGreater(BidSelection.TWO_DIAMOND)) {
             return BidSelection.TWO_DIAMOND;
         }
-        if (isTotalPointsGreaterOrEqualTo(10) && isClubsEqualTo(5)) {
+        if (isTotalPointsGreaterOrEqualTo(10) && isClubsEqualTo(5) && isOrdinalGreater(BidSelection.TWO_CLUBS)) {
             return BidSelection.TWO_CLUBS;
         }
-        if (is4432or4433SplitAndAtLeast6Points()) {
+        if (is4432or4433SplitAndAtLeast6Points() && isOrdinalGreater(BidSelection.ONE_NO_TRUMPS)) {
             return BidSelection.ONE_NO_TRUMPS;
         }
-        if (isTotalPointsGreaterOrEqualTo(6) && isSpadesEqualTo(5)) {
+        if (isTotalPointsGreaterOrEqualTo(6) && isSpadesEqualTo(5) && isOrdinalGreater(BidSelection.ONE_SPADES)) {
             return BidSelection.ONE_SPADES;
         }
-        if (isTotalPointsGreaterOrEqualTo(6) && isHeartsEqualTo(5)) {
+        if (isTotalPointsGreaterOrEqualTo(6) && isHeartsEqualTo(5) && isOrdinalGreater(BidSelection.ONE_HEARTS)) {
             return BidSelection.ONE_HEARTS;
         }
-        if (isTotalPointsGreaterOrEqualTo(6) && isOneOfTheAmounts(List.of(4, 5))) {
+        if (isTotalPointsGreaterOrEqualTo(6) && isOneOfTheAmounts(List.of(4, 5)) && isOrdinalGreater(BidSelection.ONE_DIAMONDS)) {
             return BidSelection.ONE_DIAMONDS;
         }
 
@@ -83,7 +147,29 @@ public class Bid {
             return BidSelection.THREE_CLUBS;
         }
 
-        return BidSelection.ONE_CLUBS;
+        return BidSelection.ONE_CLUB;
+    }
+    private boolean isHighHeartsGreaterThan(int value) {
+        return game.getHand().getHearts() > value;
+    }
+
+    private boolean isHeartsGreaterThan(int value) {
+        return game.getHand().getHighHearts() > value;
+    }
+    private boolean isDiamondAmount(List<Integer> values) {
+        return values.contains(game.getHand().getDiamonds());
+    }
+
+    private boolean isClubAmount(List<Integer> values) {
+        return values.contains(game.getHand().getClubs());
+    }
+
+    private boolean isHighHeartLessThan(int value) {
+        return game.getHand().getHighHearts() < value;
+    }
+
+    public boolean isOrdinalGreater(BidSelection selection) {
+        return bidSelection.ordinal() < selection.ordinal();
     }
 
     private boolean isTotalPointsLessThan(int value) {
@@ -115,9 +201,23 @@ public class Bid {
     private boolean isHeartsEqualTo(int value) {
         return game.getHand().getHearts() == value;
     }
+    private boolean isHeartsLessThan(int value) {
+        return game.getHand().getHearts() < value;
+    }
 
     private boolean isSpadesEqualTo(int value) {
         return game.getHand().getSpades() == value;
+    }
+
+    private boolean is4432or4441Split() {
+        Hand hand = game.getHand();
+
+        boolean spades = List.of(1, 2, 3, 4).contains(hand.getSpades());
+        boolean hearts = List.of(1, 2, 3, 4).contains(hand.getHearts());
+        boolean diamonds = List.of(1, 2, 3, 4).contains(hand.getDiamonds());
+        boolean clubs = List.of(1, 2, 3, 4).contains(hand.getClubs());
+
+        return spades && hearts && diamonds && clubs;
     }
 
     private boolean is4432or4433SplitAndAtLeast6Points() {
@@ -129,10 +229,6 @@ public class Bid {
         boolean clubs2or3or4 = List.of(2, 3, 4).contains(hand.getClubs());
 
         return spades2or4or3 && hearts2or4or3 && diamonds2or3or4 && clubs2or3or4 && hand.getTotalPointCount() > 5;
-    }
-
-    private boolean isSuitEqualToValuesAndTotalPoints(int suitNumber, List<Integer> values, int targetPoints, Hand hand) {
-        return values.contains(suitNumber) && hand.getTotalPointCount() >= targetPoints;
     }
 
     private boolean isTotalPointsGreaterOrEqualTo(int value) {
@@ -154,6 +250,7 @@ public class Bid {
     public BidSelection getRecommendedBid() {
         return recommendedBid;
     }
+
     public Game getGame() {
         return game;
     }
