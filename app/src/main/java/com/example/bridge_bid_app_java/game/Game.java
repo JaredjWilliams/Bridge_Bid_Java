@@ -4,13 +4,14 @@ import com.example.bridge_bid_app_java.playing_cards.Hand;
 import com.example.bridge_bid_app_java.playing_cards.Suit;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Game {
 
     private final List<BidSelection> bidSelectionHistory = List.of();
-    private List<Suit> suitsBid = Arrays.asList();
+    private final List<Suit> unbidSuits = new ArrayList<>(Arrays.asList(Suit.CLUBS, Suit.DIAMONDS, Suit.HEARTS, Suit.SPADES));
     private Player dealer;
     private Hand hand;
     private Player opener;
@@ -19,10 +20,12 @@ public class Game {
 
     }
 
-    public void updateSuitsBid(Suit suit) {
-        if (!suitsBid.contains(suit)) {
-            suitsBid.add(suit);
-        }
+    public void updateUnbidSuitsBid(Suit suit) {
+        unbidSuits.remove(suit);
+    }
+
+    public void updateUnbidSuitsBidsForAll(List<Suit> suits) {
+        unbidSuits.removeAll(suits);
     }
 
 
@@ -42,6 +45,10 @@ public class Game {
 
     public Player getDealer() {
         return dealer;
+    }
+
+    public List<Suit> getUnbidSuits() {
+        return unbidSuits;
     }
 
     public static Game fromJson(String json) {
