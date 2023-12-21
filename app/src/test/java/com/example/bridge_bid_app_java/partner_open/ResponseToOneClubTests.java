@@ -32,7 +32,7 @@ public class ResponseToOneClubTests {
         bid = new Bid(BidSelection.ONE_CLUB, game);
         System.out.println(game.getHand());
 
-        assertEquals(BidSelection.ONE_DIAMONDS, bid.getRecommendedBid());
+        assertEquals(BidSelection.ONE_DIAMOND, bid.getRecommendedBid());
     }
 
     @Test
@@ -41,7 +41,7 @@ public class ResponseToOneClubTests {
         bid = new Bid(BidSelection.ONE_CLUB, game);
         System.out.println(game.getHand());
 
-        assertEquals(BidSelection.ONE_DIAMONDS, bid.getRecommendedBid());
+        assertEquals(BidSelection.ONE_DIAMOND, bid.getRecommendedBid());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ResponseToOneClubTests {
         bid = new Bid(BidSelection.ONE_CLUB, game);
         System.out.println(game.getHand());
 
-        assertEquals(BidSelection.ONE_HEARTS, bid.getRecommendedBid());
+        assertEquals(BidSelection.ONE_HEART, bid.getRecommendedBid());
     }
 
     @Test
@@ -59,7 +59,7 @@ public class ResponseToOneClubTests {
         bid = new Bid(BidSelection.ONE_CLUB, game);
         System.out.println(game.getHand());
 
-        assertEquals(BidSelection.ONE_SPADES, bid.getRecommendedBid());
+        assertEquals(BidSelection.ONE_SPADE, bid.getRecommendedBid());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class ResponseToOneClubTests {
         bid = new Bid(BidSelection.ONE_CLUB, game);
         System.out.println(game.getHand());
 
-        assertEquals(BidSelection.ONE_NO_TRUMPS, bid.getRecommendedBid());
+        assertEquals(BidSelection.ONE_NO_TRUMP, bid.getRecommendedBid());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class ResponseToOneClubTests {
         bid = new Bid(BidSelection.ONE_CLUB, game);
         System.out.println(game.getHand());
 
-        assertEquals(BidSelection.TWO_DIAMOND, bid.getRecommendedBid());
+        assertEquals(BidSelection.TWO_DIAMONDS, bid.getRecommendedBid());
     }
 
     @Test

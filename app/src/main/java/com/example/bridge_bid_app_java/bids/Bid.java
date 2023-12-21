@@ -6,6 +6,7 @@ import com.example.bridge_bid_app_java.game.BidSelection;
 import com.example.bridge_bid_app_java.game.Game;
 import com.example.bridge_bid_app_java.game.Player;
 import com.example.bridge_bid_app_java.playing_cards.Hand;
+import com.example.bridge_bid_app_java.playing_cards.Suit;
 
 import java.util.List;
 
@@ -14,10 +15,13 @@ public class Bid {
     private BidSelection bidSelection;
     private Game game;
     private BidSelection recommendedBid;
+    private ResponseToOneHeartBids oneHeartResponses;
 
     public Bid(BidSelection bidSelection, Game game) {
         this.bidSelection = bidSelection;
         this.game = game;
+
+        oneHeartResponses = new ResponseToOneHeartBids(bidSelection, game);
         recommendedBid = createRecommendedBid();
     }
 
@@ -42,175 +46,137 @@ public class Bid {
 
     public BidSelection respondToPartnerBid() {
         return switch (bidSelection) {
-            case ONE_CLUB, ONE_DIAMONDS -> respondToOneClubOneDiamondBid();
-            case ONE_HEARTS -> respondToOneHeartBid();
+            case ONE_CLUB, ONE_DIAMOND -> respondToOneClubOneDiamondBid();
+            case ONE_HEART -> oneHeartResponses.getRecommendedBid();
+            case ONE_SPADE -> responseToOneSpadeBid();
             default -> BidSelection.PASS;
         };
     }
 
-    private BidSelection respondToOneHeartBid() {
-        if (isTotalPointsGreaterOrEqualTo(13) &&
-                isDiamondsEqualTo(8) &&
-                isOrdinalGreater(BidSelection.FIVE_DIAMONDS)) {
-            return BidSelection.FIVE_DIAMONDS;
-        }
-        if (isTotalPointsGreaterOrEqualTo(13) &&
-                isClubsEqualTo(8) &&
-                isOrdinalGreater(BidSelection.FIVE_CLUBS)) {
-            return BidSelection.FIVE_CLUBS;
+    private BidSelection responseToOneSpadeBid() {
+        if (isTotalPointsGreaterOrEqualTo(6) &&
+                isSuitAmountGreaterThanOrEqualTo(3, Suit.SPADES) &&
+                isOrdinalGreater(BidSelection.TWO_SPADES)) {
+            return BidSelection.TWO_SPADES;
         }
         if (isTotalPointsGreaterOrEqualTo(10) &&
-                isSpadesEqualTo(8) &&
-                isHeartsLessThan(3) &&
+                isSuitAmountLessThanOrEqualTo(2, Suit.SPADES) &&
+                isSuitAmountGreaterThanOrEqualTo(5, Suit.HEARTS) &&
+                isOrdinalGreater(BidSelection.TWO_HEARTS)) {
+            return BidSelection.TWO_HEARTS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) &
+                isSuitAmountLessThanOrEqualTo(2, Suit.SPADES) &&
+                isSuitAmountGreaterThanOrEqualTo(5, Suit.DIAMONDS) &&
+                isOrdinalGreater(BidSelection.TWO_DIAMONDS)) {
+            return BidSelection.TWO_DIAMONDS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) &&
+                isSuitAmountLessThanOrEqualTo(2, Suit.SPADES) &&
+                isSuitAmountGreaterThanOrEqualTo(5, Suit.CLUBS) &&
+                isOrdinalGreater(BidSelection.TWO_CLUBS)) {
+            return BidSelection.TWO_CLUBS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(6) &&
+                isSuitAmountLessThanOrEqualTo(2, Suit.SPADES) &&
+                is4432or4441Split() &&
+                isOrdinalGreater(BidSelection.ONE_NO_TRUMP)) {
+            return BidSelection.ONE_NO_TRUMP;
+        }
+
+        return BidSelection.PASS;
+    }
+
+
+    private BidSelection respondToOneClubOneDiamondBid() {
+        if (isTotalPointsGreaterOrEqualTo(10) &&
+                isSuitAmountGreaterThanOrEqualTo(8, Suit.SPADES) &&
                 isOrdinalGreater(BidSelection.FOUR_SPADES)) {
             return BidSelection.FOUR_SPADES;
         }
         if (isTotalPointsGreaterOrEqualTo(10) &&
-                isHeartsGreaterThan(4) &&
+                isSuitAmountGreaterThanOrEqualTo(8, Suit.HEARTS) &&
                 isOrdinalGreater(BidSelection.FOUR_HEARTS)) {
             return BidSelection.FOUR_HEARTS;
         }
+        if (isTotalPointsGreaterOrEqualTo(10) &&
+                isSuitAmountGreaterThanOrEqualTo(8, Suit.DIAMONDS) &&
+                isOrdinalGreater(BidSelection.FIVE_DIAMONDS)) {
+            return BidSelection.FIVE_DIAMONDS;
+        }
+        if (isTotalPointsGreaterOrEqualTo(10) &&
+                isSuitAmountGreaterThanOrEqualTo(8, Suit.CLUBS) &&
+                isOrdinalGreater(BidSelection.FIVE_CLUBS)) {
+            return BidSelection.FIVE_CLUBS;
+        }
         if (isTotalPointsGreaterOrEqualTo(16) &&
                 is4432or4441Split() &&
-                isHeartsLessThan(3) &&
                 isOrdinalGreater(BidSelection.THREE_NO_TRUMP)) {
             return BidSelection.THREE_NO_TRUMP;
         }
         if (isTotalPointsGreaterOrEqualTo(10) &&
-                isSpadesEqualTo(7) &&
-                isHeartsLessThan(3) &&
+                isSuitAmountGreaterThanOrEqualTo(7, Suit.SPADES) &&
                 isOrdinalGreater(BidSelection.THREE_SPADES)) {
             return BidSelection.THREE_SPADES;
         }
-        if (isTotalPointsGreaterOrEqualTo(13) &&
-                isHeartsGreaterThan(2) &&
+        if (isTotalPointsGreaterOrEqualTo(10) &&
+                isSuitAmountGreaterThanOrEqualTo(7, Suit.HEARTS) &&
                 isOrdinalGreater(BidSelection.THREE_HEARTS)) {
             return BidSelection.THREE_HEARTS;
         }
         if (isTotalPointsEqualsTo(10) &&
-                isDiamondsEqualTo(7) &&
-                isHeartsLessThan(3) &&
+                isSuitAmountGreaterThanOrEqualTo(7, Suit.DIAMONDS) &&
                 isOrdinalGreater(BidSelection.THREE_DIAMONDS)) {
             return BidSelection.THREE_DIAMONDS;
         }
         if (isTotalPointsGreaterOrEqualTo(10) &&
-                isClubsEqualTo(7) &&
-                isHeartsLessThan(3) &&
+                isSuitAmountGreaterThanOrEqualTo(7, Suit.CLUBS) &&
                 isOrdinalGreater(BidSelection.THREE_CLUBS)) {
             return BidSelection.THREE_CLUBS;
         }
         if (isTotalPointsGreaterOrEqualTo(13) &&
                 isStopperHeldInUnbidSuits(game) &&
-                isHeartsLessThan(3) &&
                 isOrdinalGreater(BidSelection.TWO_NO_TRUMP)) {
             return BidSelection.TWO_NO_TRUMP;
         }
         if (isTotalPointsGreaterOrEqualTo(10) &&
-                isSpadesEqualTo(5) &&
-                isHeartsLessThan(3) &&
-                isHighHeartLessThan(2) &&
+                isSuitAmountGreaterThanOrEqualTo(6, Suit.SPADES) &&
                 isOrdinalGreater(BidSelection.TWO_SPADES)) {
             return BidSelection.TWO_SPADES;
         }
-        if (isTotalPointsGreaterOrEqualTo(6) &&
-                isSpadesEqualTo(6) &&
-                isHighHeartLessThan(2) &&
-                isHeartsLessThan(3) &&
-                isOrdinalGreater(BidSelection.TWO_SPADES)) {
-            return BidSelection.TWO_SPADES;
-        }
-        if (isTotalPointsGreaterOrEqualTo(6) &&
-                isHeartsGreaterThan(2) &&
+        if (isTotalPointsGreaterOrEqualTo(10) &&
+                isSuitAmountGreaterThanOrEqualTo(6, Suit.HEARTS) &&
                 isOrdinalGreater(BidSelection.TWO_HEARTS)) {
             return BidSelection.TWO_HEARTS;
         }
         if (isTotalPointsGreaterOrEqualTo(10) &&
-                isHighHeartLessThan(2) &&
-                isHeartsLessThan(3) &&
-                isDiamondAmount(List.of(5, 6)) &&
-                isOrdinalGreater(BidSelection.TWO_DIAMOND)) {
-            return BidSelection.TWO_DIAMOND;
+                isSuitAmountGreaterThanOrEqualTo(6, Suit.DIAMONDS) &&
+                isOrdinalGreater(BidSelection.TWO_DIAMONDS)) {
+            return BidSelection.TWO_DIAMONDS;
         }
         if (isTotalPointsGreaterOrEqualTo(10) &&
-                isHighHeartLessThan(2) &&
-                isHeartsLessThan(3) &&
-                isClubAmount(List.of(5, 6)) &&
+                isSuitAmountGreaterThanOrEqualTo(5, Suit.CLUBS) &&
                 isOrdinalGreater(BidSelection.TWO_CLUBS)) {
             return BidSelection.TWO_CLUBS;
         }
-        if (isTotalPointsGreaterOrEqualTo(6) &&
-                is4432or4441Split() &&
-                isHighHeartLessThan(2) &&
-                isHeartsLessThan(3) &&
-                isOrdinalGreater(BidSelection.ONE_NO_TRUMPS)) {
-            return BidSelection.ONE_NO_TRUMPS;
+        if (is4432or4433SplitAndAtLeast6Points() &&
+                isOrdinalGreater(BidSelection.ONE_NO_TRUMP)) {
+            return BidSelection.ONE_NO_TRUMP;
         }
         if (isTotalPointsGreaterOrEqualTo(6) &&
-                isSpadesEqualTo(5) &&
-                isHighHeartLessThan(2) &&
-                isHeartsLessThan(3) &&
-                isOrdinalGreater(BidSelection.ONE_SPADES)) {
-            return BidSelection.ONE_SPADES;
+                isSuitAmountGreaterThanOrEqualTo(5, Suit.SPADES) &&
+                isOrdinalGreater(BidSelection.ONE_SPADE)) {
+            return BidSelection.ONE_SPADE;
         }
-
-
-        return BidSelection.PASS;
-    }
-
-    private BidSelection respondToOneClubOneDiamondBid() {
-        if (isTotalPointsGreaterOrEqualTo(10) && isSpadesEqualTo(8) && isOrdinalGreater(BidSelection.FOUR_SPADES)) {
-            return BidSelection.FOUR_SPADES;
+        if (isTotalPointsGreaterOrEqualTo(6) &&
+                isSuitAmountGreaterThanOrEqualTo(5, Suit.HEARTS) &&
+                isOrdinalGreater(BidSelection.ONE_HEART)) {
+            return BidSelection.ONE_HEART;
         }
-        if (isTotalPointsGreaterOrEqualTo(10) && isHeartsEqualTo(8) && isOrdinalGreater(BidSelection.FOUR_HEARTS)) {
-            return BidSelection.FOUR_HEARTS;
-        }
-        if (isTotalPointsGreaterOrEqualTo(10) && isDiamondsEqualTo(8) && isOrdinalGreater(BidSelection.FIVE_DIAMONDS)) {
-            return BidSelection.FIVE_DIAMONDS;
-        }
-        if (isTotalPointsGreaterOrEqualTo(10) && isClubsEqualTo(8) && isOrdinalGreater(BidSelection.FIVE_CLUBS)) {
-            return BidSelection.FIVE_CLUBS;
-        }
-        if (isTotalPointsGreaterOrEqualTo(16) && is4432or4441Split() && isOrdinalGreater(BidSelection.THREE_NO_TRUMP)) {
-            return BidSelection.THREE_NO_TRUMP;
-        }
-        if (isTotalPointsGreaterOrEqualTo(10) && isSpadesEqualTo(7) && isOrdinalGreater(BidSelection.THREE_SPADES)) {
-            return BidSelection.THREE_SPADES;
-        }
-        if (isTotalPointsGreaterOrEqualTo(10) && isHeartsEqualTo(7) && isOrdinalGreater(BidSelection.THREE_HEARTS)) {
-            return BidSelection.THREE_HEARTS;
-        }
-        if (isTotalPointsEqualsTo(10) && isDiamondsEqualTo(7) && isOrdinalGreater(BidSelection.THREE_DIAMONDS)) {
-            return BidSelection.THREE_DIAMONDS;
-        }
-        if (isTotalPointsGreaterOrEqualTo(10) && isClubsEqualTo(7) && isOrdinalGreater(BidSelection.THREE_CLUBS)) {
-            return BidSelection.THREE_CLUBS;
-        }
-        if (isTotalPointsGreaterOrEqualTo(13) && isStopperHeldInUnbidSuits(game) && isOrdinalGreater(BidSelection.TWO_NO_TRUMP)) {
-            return BidSelection.TWO_NO_TRUMP;
-        }
-        if (isTotalPointsGreaterOrEqualTo(10) && isSpadesEqualTo(6) && isOrdinalGreater(BidSelection.TWO_SPADES)) {
-            return BidSelection.TWO_SPADES;
-        }
-        if (isTotalPointsGreaterOrEqualTo(10) && isHeartsEqualTo(6) && isOrdinalGreater(BidSelection.TWO_HEARTS)) {
-            return BidSelection.TWO_HEARTS;
-        }
-        if (isTotalPointsGreaterOrEqualTo(10) && isDiamondsEqualTo(6) && isOrdinalGreater(BidSelection.TWO_DIAMOND)) {
-            return BidSelection.TWO_DIAMOND;
-        }
-        if (isTotalPointsGreaterOrEqualTo(10) && isClubsEqualTo(5) && isOrdinalGreater(BidSelection.TWO_CLUBS)) {
-            return BidSelection.TWO_CLUBS;
-        }
-        if (is4432or4433SplitAndAtLeast6Points() && isOrdinalGreater(BidSelection.ONE_NO_TRUMPS)) {
-            return BidSelection.ONE_NO_TRUMPS;
-        }
-        if (isTotalPointsGreaterOrEqualTo(6) && isSpadesEqualTo(5) && isOrdinalGreater(BidSelection.ONE_SPADES)) {
-            return BidSelection.ONE_SPADES;
-        }
-        if (isTotalPointsGreaterOrEqualTo(6) && isHeartsEqualTo(5) && isOrdinalGreater(BidSelection.ONE_HEARTS)) {
-            return BidSelection.ONE_HEARTS;
-        }
-        if (isTotalPointsGreaterOrEqualTo(6) && isOneOfTheAmounts(List.of(4, 5)) && isOrdinalGreater(BidSelection.ONE_DIAMONDS)) {
-            return BidSelection.ONE_DIAMONDS;
+        if (isTotalPointsGreaterOrEqualTo(6) &&
+                isSuitAmountOneOfTheAmounts(List.of(4, 5), Suit.DIAMONDS) &&
+                isOrdinalGreater(BidSelection.ONE_DIAMOND)) {
+            return BidSelection.ONE_DIAMOND;
         }
 
         return BidSelection.PASS;
@@ -219,30 +185,19 @@ public class Bid {
     public BidSelection createOpenBid() {
         if (isTotalPointsLessThan(13)) {
             return BidSelection.PASS;
-        } else if (isClubsEqualTo(7)) {
+        } else if (isSuitAmountGreaterThanOrEqualTo(7, Suit.CLUBS)) {
             return BidSelection.THREE_CLUBS;
         }
 
         return BidSelection.ONE_CLUB;
     }
-    private boolean isHighHeartsGreaterThan(int value) {
-        return game.getHand().getHearts() > value;
+
+    boolean isSuitAmountGreaterThanOrEqualTo(int value, Suit suit) {
+        return game.getHand().getCards().stream().filter(card -> card.getSuit() == suit).count() >= value;
     }
 
-    private boolean isHeartsGreaterThan(int value) {
-        System.out.println(game.getHand().getHearts() > value);
-        return game.getHand().getHearts() > value;
-    }
-    private boolean isDiamondAmount(List<Integer> values) {
-        return values.contains(game.getHand().getDiamonds());
-    }
-
-    private boolean isClubAmount(List<Integer> values) {
-        return values.contains(game.getHand().getClubs());
-    }
-
-    private boolean isHighHeartLessThan(int value) {
-        return game.getHand().getHighHearts() < value;
+    boolean isSuitAmountLessThanOrEqualTo(int value, Suit suit) {
+        return game.getHand().getCards().stream().filter(card -> card.getSuit() == suit).count() <= value;
     }
 
     public boolean isOrdinalGreater(BidSelection selection) {
@@ -272,21 +227,7 @@ public class Bid {
         return game.getHand().getTotalPointCount() > 12;
     }
 
-    private boolean didPartnerBid(BidSelection bidSelection) {
-        return this.bidSelection == bidSelection;
-    }
-    private boolean isHeartsEqualTo(int value) {
-        return game.getHand().getHearts() == value;
-    }
-    private boolean isHeartsLessThan(int value) {
-        return game.getHand().getHearts() < value;
-    }
-
-    private boolean isSpadesEqualTo(int value) {
-        return game.getHand().getSpades() == value;
-    }
-
-    private boolean is4432or4441Split() {
+    boolean is4432or4441Split() {
         Hand hand = game.getHand();
 
         boolean spades = List.of(1, 2, 3, 4).contains(hand.getSpades());
@@ -308,20 +249,12 @@ public class Bid {
         return spades2or4or3 && hearts2or4or3 && diamonds2or3or4 && clubs2or3or4 && hand.getTotalPointCount() > 5;
     }
 
-    private boolean isTotalPointsGreaterOrEqualTo(int value) {
+    boolean isTotalPointsGreaterOrEqualTo(int value) {
         return game.getHand().getTotalPointCount() >= value;
     }
 
-    private boolean isClubsEqualTo(int value) {
-        return game.getHand().getClubs() == value;
-    }
-
-    private boolean isDiamondsEqualTo(int value) {
-        return game.getHand().getDiamonds() == value;
-    }
-
-    private boolean isOneOfTheAmounts(List<Integer> numbers) {
-        return numbers.contains(game.getHand().getDiamonds());
+    private boolean isSuitAmountOneOfTheAmounts(List<Integer> numbers, Suit suit) {
+        return numbers.contains((int) game.getHand().getCards().stream().filter(card -> card.getSuit() == suit).count());
     }
 
     public BidSelection getRecommendedBid() {
