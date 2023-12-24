@@ -42,7 +42,9 @@ public enum BidSelection {
     SEVEN_SPADES(Suit.SPADES, R.drawable.card_suit_spades,"7", Color.WHITE),
     SEVEN_NO_TRUMP(Suit.NO_TRUMP, R.drawable.no_trump_background, "7 NT", Color.WHITE),
 
-    PASS(Suit.NO_TRUMP, R.drawable.no_trump_background, "Pass", Color.WHITE);
+    PASS(Suit.NO_TRUMP, R.drawable.no_trump_background, "Pass", Color.WHITE),
+    DOUBLE(Suit.NO_TRUMP, R.drawable.no_trump_background, "X", Color.WHITE),
+    REDOUBLE(Suit.NO_TRUMP, R.drawable.no_trump_background, "XX", Color.WHITE);
 
     private int image;
     private Suit suit;
