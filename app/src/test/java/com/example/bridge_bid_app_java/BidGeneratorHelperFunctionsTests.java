@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class BidHelperFunctionsTests {
+public class BidGeneratorHelperFunctionsTests {
 
     @Test
     public void testisStopperHeldInUnbidSuits() {
@@ -20,8 +20,8 @@ public class BidHelperFunctionsTests {
         game.updateUnbidSuitsBid(Suit.CLUBS);
         game.updateUnbidSuitsBid(Suit.SPADES);
         game.setHand(TargetHandGenerator.createTargetedHand(11, 3, 3, 4, 3, List.of(Card.ACE_DIAMONDS, Card.ACE_HEARTS)));
-
-        assertTrue(BidHelperFunctions.isStopperHeldInUnbidSuits(game));
+        BidHelperFunctions.setGame(game);
+        assertTrue(BidHelperFunctions.isStopperHeldInUnbidSuits());
     }
 
 }

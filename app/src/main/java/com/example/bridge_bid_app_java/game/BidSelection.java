@@ -7,12 +7,12 @@ import com.example.bridge_bid_app_java.playing_cards.Suit;
 
 public enum BidSelection {
     ONE_CLUB(Suit.CLUBS, R.drawable.card_suit_clubs, "1", Color.WHITE),
-    ONE_DIAMONDS(Suit.DIAMONDS, R.drawable.card_suit_diamonds, "1", Color.BLACK),
-    ONE_HEARTS(Suit.HEARTS, R.drawable.card_suit_heats, "1", Color.BLACK),
-    ONE_SPADES(Suit.SPADES, R.drawable.card_suit_spades, "1", Color.WHITE),
-    ONE_NO_TRUMPS(Suit.NO_TRUMP, R.drawable.no_trump_background, "1 NT", Color.WHITE),
+    ONE_DIAMOND(Suit.DIAMONDS, R.drawable.card_suit_diamonds, "1", Color.BLACK),
+    ONE_HEART(Suit.HEARTS, R.drawable.card_suit_heats, "1", Color.BLACK),
+    ONE_SPADE(Suit.SPADES, R.drawable.card_suit_spades, "1", Color.WHITE),
+    ONE_NO_TRUMP(Suit.NO_TRUMP, R.drawable.no_trump_background, "1 NT", Color.WHITE),
     TWO_CLUBS(Suit.CLUBS, R.drawable.card_suit_clubs, "2", Color.WHITE),
-    TWO_DIAMOND(Suit.DIAMONDS, R.drawable.card_suit_diamonds, "2", Color.BLACK),
+    TWO_DIAMONDS(Suit.DIAMONDS, R.drawable.card_suit_diamonds, "2", Color.BLACK),
     TWO_HEARTS(Suit.HEARTS, R.drawable.card_suit_heats, "2", Color.BLACK),
     TWO_SPADES(Suit.SPADES, R.drawable.card_suit_spades, "2", Color.WHITE),
     TWO_NO_TRUMP(Suit.NO_TRUMP, R.drawable.no_trump_background, "2 NT", Color.WHITE),
@@ -42,7 +42,9 @@ public enum BidSelection {
     SEVEN_SPADES(Suit.SPADES, R.drawable.card_suit_spades,"7", Color.WHITE),
     SEVEN_NO_TRUMP(Suit.NO_TRUMP, R.drawable.no_trump_background, "7 NT", Color.WHITE),
 
-    PASS(Suit.NO_TRUMP, R.drawable.no_trump_background, "Pass", Color.WHITE);
+    PASS(Suit.NO_TRUMP, R.drawable.no_trump_background, "Pass", Color.WHITE),
+    DOUBLE(Suit.NO_TRUMP, R.drawable.no_trump_background, "X", Color.WHITE),
+    REDOUBLE(Suit.NO_TRUMP, R.drawable.no_trump_background, "XX", Color.WHITE);
 
     private int image;
     private Suit suit;
