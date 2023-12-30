@@ -63,20 +63,14 @@
 
     </LinearLayout>
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/strong_open"
+        android:text="Check this if your partner plays a strong or weak 2 bid"/>
+
     <TextView
         android:id="@+id/card_counter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"/>
-
-    <TextView
-        android:id="@+id/point_counter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"/>
-
-    <TextView
-        android:id="@+id/distribution_counter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"/>

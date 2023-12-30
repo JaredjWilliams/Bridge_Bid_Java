@@ -10,6 +10,7 @@ public class BidGenerator {
     private final ResponseToOneClubDiamondBids oneClubDiamondBids = new ResponseToOneClubDiamondBids();
     private final ResponseToOneHeartBids oneHeartResponses = new ResponseToOneHeartBids();
     private final ResponseToOneSpadeBids oneSpadeBids = new ResponseToOneSpadeBids();
+    private final ResponseToTwoClubBid twoClubBids = new ResponseToTwoClubBid();
     private final ResponseToOneNTBids oneNTBids = new ResponseToOneNTBids();
     private final OpenBids openBids = new OpenBids();
 
@@ -66,7 +67,7 @@ public class BidGenerator {
             case ONE_HEART -> oneHeartResponses.getRecommendedBid();
             case ONE_SPADE -> oneSpadeBids.getRecommendedBid();
             case ONE_NO_TRUMP -> oneNTBids.getRecommendedBid();
-            case TWO_CLUBS -> BidSelection.PASS;
+            case TWO_CLUBS -> twoClubBids.getRecommendedBid();
             case TWO_DIAMONDS -> BidSelection.PASS;
             case TWO_HEARTS -> BidSelection.PASS;
             case TWO_SPADES -> BidSelection.PASS;

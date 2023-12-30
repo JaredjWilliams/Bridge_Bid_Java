@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -24,6 +25,7 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
     CardSelectionPresenter presenter = new CardSelectionPresenter(this);
     private final Suit currentSuit = Suit.CLUBS;
 
+    private CheckBox partnerStrongOrWeak2BidBox;
     private TextView totalPointCounterTextView;
     private RadioButton rightOpponentButton;
     private RadioButton leftOpponentButton;
@@ -42,6 +44,7 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
         setupViews();
 
         updateCardGrid(currentSuit, false);
+        createStrongOrWeak2CheckMark();
         createSuitSelectionImages();
         createRadioButtons();
         createNextButton();
@@ -51,6 +54,7 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
         totalPointCounterTextView = findViewById(R.id.total_point_counter);
         rightOpponentButton = findViewById(R.id.right_opp_radio_button);
         leftOpponentButton = findViewById(R.id.left_opp_radio_button);
+        partnerStrongOrWeak2BidBox = findViewById( R.id.strong_open);
         partnerButton = findViewById(R.id.partner_radio_button);
         cardCounterTextView = findViewById(R.id.card_counter);
         userButton = findViewById(R.id.user_radio_button);
@@ -78,6 +82,16 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
             public void onClick(View view) {
                 presenter.updateHand();
                 startBidActivity();
+            }
+        });
+    }
+
+    private void createStrongOrWeak2CheckMark() {
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean isStrong2 = Player.PARTNER.getPlayerStrong2Bid();
+                presenter.updatePartnerStrong2Bid(!isStrong2);
             }
         });
     }
