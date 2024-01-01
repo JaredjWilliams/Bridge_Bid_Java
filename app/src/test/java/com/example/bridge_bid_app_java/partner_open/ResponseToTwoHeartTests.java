@@ -11,7 +11,7 @@ import com.example.bridge_bid_app_java.game.Player;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ResponseToTwoClubsTests {
+public class ResponseToTwoHeartTests {
 
     private Game game;
     private BidGenerator bidGenerator;
@@ -24,27 +24,9 @@ public class ResponseToTwoClubsTests {
     }
 
     @Test
-    public void testTwoDiamonds() {
-        game.setHand(createTargetedHand(10, 3, 4, 5, 1));
-        bidGenerator.updateRecommendedBid(BidSelection.TWO_CLUBS, game);
-        System.out.println(game.getHand());
-
-        assertEquals(BidSelection.TWO_DIAMONDS, bidGenerator.getRecommendedBid());
-    }
-
-    @Test
-    public void testTwoHearts() {
-        game.setHand(createTargetedHand(10, 3, 5, 4, 1));
-        bidGenerator.updateRecommendedBid(BidSelection.TWO_CLUBS, game);
-        System.out.println(game.getHand());
-
-        assertEquals(BidSelection.TWO_HEARTS, bidGenerator.getRecommendedBid());
-    }
-
-    @Test
     public void testTwoSpades() {
-        game.setHand(createTargetedHand(10, 5, 3, 4, 1));
-        bidGenerator.updateRecommendedBid(BidSelection.TWO_CLUBS, game);
+        game.setHand(createTargetedHand(10, 5, 1, 4, 3));
+        bidGenerator.updateRecommendedBid(BidSelection.TWO_HEARTS, game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_SPADES, bidGenerator.getRecommendedBid());
@@ -52,28 +34,28 @@ public class ResponseToTwoClubsTests {
 
     @Test
     public void testTwoNT() {
-        game.setHand(createTargetedHand(6, 5, 3, 4, 1));
-        bidGenerator.updateRecommendedBid(BidSelection.TWO_CLUBS, game);
+        game.setHand(createTargetedHand(6, 5, 1, 4, 3));
+        bidGenerator.updateRecommendedBid(BidSelection.TWO_HEARTS, game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_NO_TRUMP, bidGenerator.getRecommendedBid());
     }
 
     @Test
-    public void testThreeClubs() {
+    public void testThreeHearts() {
         game.setHand(createTargetedHand(7, 7, 3, 3, 4, 3));
-        bidGenerator.updateRecommendedBid(BidSelection.TWO_CLUBS, game);
+        bidGenerator.updateRecommendedBid(BidSelection.TWO_HEARTS, game);
         System.out.println(game.getHand());
 
-        assertEquals(BidSelection.THREE_CLUBS, bidGenerator.getRecommendedBid());
+        assertEquals(BidSelection.THREE_HEARTS, bidGenerator.getRecommendedBid());
     }
 
     @Test
-    public void testFiveClubs() {
+    public void testFourHearts() {
         game.setHand(createTargetedHand(10, 3, 3, 4, 3));
-        bidGenerator.updateRecommendedBid(BidSelection.TWO_CLUBS, game);
+        bidGenerator.updateRecommendedBid(BidSelection.TWO_HEARTS, game);
         System.out.println(game.getHand());
 
-        assertEquals(BidSelection.FIVE_CLUBS, bidGenerator.getRecommendedBid());
+        assertEquals(BidSelection.FOUR_HEARTS, bidGenerator.getRecommendedBid());
     }
 }

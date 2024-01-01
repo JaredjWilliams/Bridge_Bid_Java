@@ -9,14 +9,14 @@ import static com.example.bridge_bid_app_java.utils.BidHelperFunctions.isTotalPo
 import com.example.bridge_bid_app_java.game.BidSelection;
 import com.example.bridge_bid_app_java.playing_cards.Suit;
 
-public class ResponseToTwoClubBid {
+public class ResponseToTwoHeartBid {
 
     public BidSelection getRecommendedBid() {
-        if (isFiveClubsAValidResponse()) {
-            return BidSelection.FIVE_CLUBS;
+        if (isFourHeartsAValidResponse()) {
+            return BidSelection.FOUR_HEARTS;
         }
-        if (isThreeClubsAValidResponse()) {
-            return BidSelection.THREE_CLUBS;
+        if (isThreeHeartsAValidResponse()) {
+            return BidSelection.THREE_HEARTS;
         }
         if (isTwoNTAValidResponse()) {
             return BidSelection.TWO_NO_TRUMP;
@@ -24,20 +24,14 @@ public class ResponseToTwoClubBid {
         if (isTwoSpadesAValidResponse()) {
             return BidSelection.TWO_SPADES;
         }
-        if (isTwoHeartsAValidResponse()) {
-            return BidSelection.TWO_HEARTS;
-        }
-        if (isTwoDiamondsAValidResponse()) {
-            return BidSelection.TWO_DIAMONDS;
-        }
 
         return BidSelection.PASS;
     }
 
-    private boolean isThreeClubsAValidResponse() {
+    private boolean isThreeHeartsAValidResponse() {
         return isTotalPointsGreaterOrEqualTo(7) &&
-                isSuitAmountGreaterThanOrEqualTo(3, Suit.CLUBS) &&
-                isOrdinalGreater(BidSelection.THREE_CLUBS);
+                isSuitAmountGreaterThanOrEqualTo(3, Suit.HEARTS) &&
+                isOrdinalGreater(BidSelection.THREE_HEARTS);
     }
 
     private boolean isTwoNTAValidResponse() {
@@ -48,27 +42,13 @@ public class ResponseToTwoClubBid {
     private boolean isTwoSpadesAValidResponse() {
         return isTotalPointsGreaterOrEqualTo(10) &&
                 isSuitAmountGreaterThanOrEqualTo(5, Suit.SPADES) &&
-                isSuitAmountLessThanOrEqualTo(1, Suit.CLUBS) &&
+                isSuitAmountLessThanOrEqualTo(1, Suit.HEARTS) &&
                 isOrdinalGreater(BidSelection.TWO_SPADES);
     }
 
-    private boolean isTwoHeartsAValidResponse() {
+    private boolean isFourHeartsAValidResponse() {
         return isTotalPointsGreaterOrEqualTo(10) &&
-                isSuitAmountGreaterThanOrEqualTo(5, Suit.HEARTS) &&
-                isSuitAmountLessThanOrEqualTo(1, Suit.CLUBS) &&
-                isOrdinalGreater(BidSelection.TWO_HEARTS);
-    }
-
-    private boolean isTwoDiamondsAValidResponse() {
-        return isTotalPointsGreaterOrEqualTo(10) &&
-                isSuitAmountGreaterThanOrEqualTo(5, Suit.DIAMONDS) &&
-                isSuitAmountLessThanOrEqualTo(1, Suit.CLUBS) &&
-                isOrdinalGreater(BidSelection.TWO_DIAMONDS);
-    }
-
-    private boolean isFiveClubsAValidResponse() {
-        return isTotalPointsGreaterOrEqualTo(10) &&
-                isSuitAmountGreaterThanOrEqualTo(3, Suit.CLUBS) &&
-                isOrdinalGreater(BidSelection.FIVE_CLUBS);
+                isSuitAmountGreaterThanOrEqualTo(3, Suit.HEARTS) &&
+                isOrdinalGreater(BidSelection.FOUR_HEARTS);
     }
 }
