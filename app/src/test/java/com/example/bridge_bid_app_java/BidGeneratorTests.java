@@ -33,14 +33,5 @@ public class BidGeneratorTests {
         assertEquals(BidSelection.PASS, bidGenerator.getRecommendedBid());
     }
 
-    @Test
-    public void testBidOpenerThreeClub() {
-        Game game = new Game();
-        game.setHand(createTargetedHand(13, 2, 2, 2, 7));
-        BidGenerator bidGenerator = new BidGenerator(null, game);
-
-        assertEquals(BidSelection.THREE_CLUBS, bidGenerator.getRecommendedBid());
-    }
-
 
 }

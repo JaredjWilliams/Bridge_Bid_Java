@@ -73,6 +73,10 @@ public class CardSelectionPresenter {
         return gson.toJson(game);
     }
 
+    public void updatePartnerStrong2Bid(boolean isStrong2) {
+        Player.PARTNER.setPlayerStrong2Bid(isStrong2);
+    }
+
     public Hand getHand() {
         return hand;
     }

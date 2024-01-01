@@ -101,6 +101,21 @@ public class TargetHandGenerator {
         return hand;
     }
 
+    public static Hand createTargetedHand(int totalPoints, int hcp, int spades, int hearts, int diamonds, int clubs) {
+        Hand hand;
+
+        do {
+            hand = new Hand(createRandomHand());
+        } while (hand.getTotalPointCount() != totalPoints ||
+                hand.getSpades() != spades ||
+                hand.getHearts() != hearts ||
+                hand.getDiamonds() != diamonds ||
+                hand.getClubs() != clubs ||
+                hand.getHighCardPoints() != hcp);
+
+        return hand;
+    }
+
     public static Hand createTargetedHand(int totalPoints, int spades, int hearts, int diamonds, int clubs) {
         Hand hand;
 
