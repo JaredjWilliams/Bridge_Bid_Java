@@ -10,12 +10,16 @@ public class BidGenerator {
     private final ResponseToOneClubDiamondBids oneClubDiamondBids = new ResponseToOneClubDiamondBids();
     private final ResponseToOneHeartBids oneHeartResponses = new ResponseToOneHeartBids();
     private final ResponseToTwoDiamondBid twoDiamondBids = new ResponseToTwoDiamondBid();
+    private final ResponseToThreeBid threeClubBid = new ResponseToThreeBid();
     private final ResponseToOneSpadeBids oneSpadeBids = new ResponseToOneSpadeBids();
     private final ResponseToTwoHeartBid twoHeartBids = new ResponseToTwoHeartBid();
     private final ResponseToTwoSpadeBid twoSpadeBid = new ResponseToTwoSpadeBid();
     private final ResponseToTwoClubBid twoClubBids = new ResponseToTwoClubBid();
     private final ResponseToOneNTBids oneNTBids = new ResponseToOneNTBids();
+    private final ResponseToTwoNTBid twoNTBids = new ResponseToTwoNTBid();
     private final OpenBids openBids = new OpenBids();
+
+
 
     private BidSelection bidSelection;
     private Game game;
@@ -74,11 +78,8 @@ public class BidGenerator {
             case TWO_DIAMONDS -> twoDiamondBids.getRecommendedBid();
             case TWO_HEARTS -> twoHeartBids.getRecommendedBid();
             case TWO_SPADES -> twoSpadeBid.getRecommendedBid();
-            case TWO_NO_TRUMP -> BidSelection.PASS;
-            case THREE_CLUBS -> BidSelection.PASS;
-            case THREE_DIAMONDS -> BidSelection.PASS;
-            case THREE_HEARTS -> BidSelection.PASS;
-            case THREE_SPADES -> BidSelection.PASS;
+            case TWO_NO_TRUMP -> twoNTBids.getRecommendedBid();
+            case THREE_CLUBS, THREE_DIAMONDS, THREE_HEARTS, THREE_SPADES -> threeClubBid.getRecommendedBid();
             case THREE_NO_TRUMP -> BidSelection.PASS;
             case FOUR_CLUBS -> BidSelection.PASS;
             case FOUR_DIAMONDS -> BidSelection.PASS;

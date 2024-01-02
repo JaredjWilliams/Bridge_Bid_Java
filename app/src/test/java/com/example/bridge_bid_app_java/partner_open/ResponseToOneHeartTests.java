@@ -1,6 +1,7 @@
 package com.example.bridge_bid_app_java.partner_open;
 
 import static com.example.bridge_bid_app_java.utils.TargetHandGenerator.createTargetedHand;
+import static com.example.bridge_bid_app_java.utils.TargetHandGenerator.createTargetedHandWithAndWithout;
 import static com.example.bridge_bid_app_java.utils.TargetHandGenerator.createTargetedHandWithout;
 import static org.junit.Assert.assertEquals;
 
@@ -102,10 +103,10 @@ public class ResponseToOneHeartTests {
         List<Card> cardsLeftOut = List.of(Card.ACE_HEARTS, Card.KING_HEARTS, Card.QUEEN_HEARTS, Card.JACK_HEARTS);
         List<Card> cardsIncluded = List.of(Card.ACE_CLUBS, Card.KING_DIAMONDS);
 
-        Hand hand = createTargetedHand(13, 4, 2, 3, 4, cardsIncluded, cardsLeftOut);
+        Hand hand = createTargetedHandWithAndWithout(13, 4, 2, 3, 4, cardsIncluded, cardsLeftOut);
 
         game.setHand(hand);
-        game.updateUnbidSuitsBidsForAll(List.of(Suit.HEARTS, Suit.SPADES));
+        game.updateBidSuitsForAll(List.of(Suit.HEARTS, Suit.SPADES));
         bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
 
         System.out.println(game.getHand());

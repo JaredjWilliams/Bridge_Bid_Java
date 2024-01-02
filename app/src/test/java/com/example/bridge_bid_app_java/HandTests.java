@@ -1,15 +1,16 @@
 package com.example.bridge_bid_app_java;
 
+import static com.example.bridge_bid_app_java.utils.TargetHandGenerator.createTargetedHandWithAndWithout;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.example.bridge_bid_app_java.playing_cards.Card;
 import com.example.bridge_bid_app_java.playing_cards.Hand;
+import com.example.bridge_bid_app_java.playing_cards.Suit;
 
 import org.junit.Test;
 
-import java.util.HashSet;
 import java.util.List;
 
 public class HandTests {
@@ -19,6 +20,7 @@ public class HandTests {
     List<Card> mockFullHand = List.of(Card.FOUR_DIAMONDS, Card.TWO_HEARTS, Card.SIX_HEARTS, Card.ACE_DIAMONDS,
             Card.KING_HEARTS, Card.TEN_HEARTS, Card.THREE_SPADES, Card.NINE_DIAMONDS, Card.THREE_CLUBS,
             Card.JACK_SPADES, Card.QUEEN_DIAMONDS, Card.SIX_DIAMONDS, Card.FIVE_CLUBS);
+
 
     // The card passed as the parameter is added to the hand.
     @Test
@@ -80,4 +82,47 @@ public class HandTests {
 
         assertEquals(1, hand.getAces());
     }
+
+
+    // WHEN: A suit contains an Ace and a King
+    // RESULT: The quick tricks will be incremented by 2
+    @Test
+    public void testCalculateQuickTricksForSuitAceAndKing() {
+         Hand hand = createTargetedHandWithAndWithout(11, 5, 3, 3,
+                2, List.of(Card.ACE_SPADES, Card.KING_SPADES), List.of(Card.QUEEN_SPADES, Card.JACK_SPADES, Card.TEN_SPADES));
+
+        assertEquals(2, hand.calculateQuickTrickFor(Suit.SPADES), 0);
+    }
+
+    // WHEN: A suit contains an Ace and a Queen
+    // RESULT: The quick tricks will be incremented by 1.5
+    @Test
+    public void testCalculateQuickTricksForSuitAceAndQueen() {
+        Hand hand = createTargetedHandWithAndWithout(11, 5, 3, 3, 2,
+                List.of(Card.ACE_SPADES, Card.QUEEN_SPADES), List.of(Card.KING_SPADES, Card.JACK_SPADES, Card.TEN_SPADES));
+
+        assertEquals(1.5, hand.calculateQuickTrickFor(Suit.SPADES), 0);
+    }
+
+    // WHEN: A hand contains a stopper in a suit.
+    // RESULT: The stopper amount for the suit increases.
+    @Test
+    public void calculateStoppers() {
+        Hand hand = createTargetedHandWithAndWithout(20, 3, 3, 3, 4,
+                List.of(Card.ACE_SPADES, Card.ACE_HEARTS, Card.ACE_CLUBS, Card.ACE_DIAMONDS),
+                List.of(Card.KING_SPADES, Card.KING_HEARTS, Card.KING_CLUBS, Card.KING_DIAMONDS));
+
+        int spadeCount = hand.getSpadeStoppers().get(Suit.SPADES);
+        int heartCount = hand.getHeartStoppers().get(Suit.HEARTS);
+        int diamondCount = hand.getDiamondStoppers().get(Suit.DIAMONDS);
+        int clubCount = hand.getClubStoppers().get(Suit.CLUBS);
+
+
+        assertEquals(1, spadeCount);
+        assertEquals(1, heartCount);
+        assertEquals(1, diamondCount);
+        assertEquals(1, clubCount);
+    }
+
+
 }
