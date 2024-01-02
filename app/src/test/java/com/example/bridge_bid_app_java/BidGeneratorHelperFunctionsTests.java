@@ -19,7 +19,7 @@ public class BidGeneratorHelperFunctionsTests {
         Game game = new Game();
         game.updateUnbidSuitsBid(Suit.CLUBS);
         game.updateUnbidSuitsBid(Suit.SPADES);
-        game.setHand(TargetHandGenerator.createTargetedHand(11, 3, 3, 4, 3, List.of(Card.ACE_DIAMONDS, Card.ACE_HEARTS)));
+        game.setHand(TargetHandGenerator.createTargetedHandWith(11, 3, 3, 4, 3, List.of(Card.ACE_DIAMONDS, Card.ACE_HEARTS)));
         BidHelperFunctions.setGame(game);
         assertTrue(BidHelperFunctions.isStopperHeldInUnbidSuits());
     }

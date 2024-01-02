@@ -12,6 +12,7 @@ public class Hand {
     private int totalPointCount;
     private int distributionPoints;
     private int highCardPoints;
+    private double quickTricks;
     private HashMap<Suit, Integer> heartStoppers = new HashMap<>();
     private HashMap<Suit, Integer> spadeStoppers = new HashMap<>();
     private HashMap<Suit, Integer> diamondStoppers = new HashMap<>();
@@ -60,22 +61,63 @@ public class Hand {
         calculateSuits();
         updateCanOpen(totalPointCount);
         updateCanBidTwoLevel(totalPointCount);
-        calculateHighSpades();
-        calculateHighHearts();
-        calculateHighDiamonds();
-        calculateHighClubs();
         calculateStoppers();
+        calculateAllQuickTricks();
+        calculateHighCards();
+    }
+
+    private void calculateAllQuickTricks() {
+        double total = 0;
+
+        total += calculateQuickTrickFor(Suit.CLUBS);
+        total += calculateQuickTrickFor(Suit.DIAMONDS);
+        total += calculateQuickTrickFor(Suit.HEARTS);
+        total += calculateQuickTrickFor(Suit.SPADES);
+
+        quickTricks = total;
+    }
+
+    public double calculateQuickTrickFor(Suit suit) {
+        List<Rank> suitOfCards = cards.stream()
+                .filter(card -> card.getSuit() == suit)
+                .map(Card::getRank)
+                .toList();
+
+        if (isQuickTrickFor(suitOfCards, Rank.ACE, Rank.KING)) {
+            return QuickTrick.ACE_KING.getValue();
+        }
+        if (isQuickTrickFor(suitOfCards, Rank.ACE, Rank.QUEEN)) {
+            return QuickTrick.ACE_QUEEN.getValue();
+        }
+        if (isQuickTrickFor(suitOfCards, Rank.KING, Rank.QUEEN)) {
+            return QuickTrick.KING_QUEEN.getValue();
+        }
+        if (isQuickTrickFor(suitOfCards, Rank.ACE, null)) {
+            return QuickTrick.ACE.getValue();
+        }
+        if (isQuickTrickFor(suitOfCards, Rank.KING, null)) {
+            return QuickTrick.KING.getValue();
+        }
+
+        return 0;
+    }
+
+    private boolean isQuickTrickFor(List<Rank> suitOfCards, Rank rankOne, Rank rankTwo) {
+        if (rankTwo == null) {
+            return suitOfCards.contains(rankOne);
+        }
+        return suitOfCards.contains(rankOne) && suitOfCards.contains(rankTwo);
     }
 
     public void calculateHCP() {
         int total = 0;
 
         for (Card card: cards) {
-            switch (card) {
-                case JACK_CLUBS, JACK_DIAMONDS, JACK_HEARTS, JACK_SPADES -> total++;
-                case QUEEN_CLUBS, QUEEN_DIAMONDS, QUEEN_HEARTS, QUEEN_SPADES -> total += 2;
-                case KING_CLUBS, KING_DIAMONDS, KING_HEARTS, KING_SPADES -> total += 3;
-                case ACE_CLUBS, ACE_DIAMONDS, ACE_HEARTS, ACE_SPADES -> total += 4;
+            switch (card.getRank()) {
+                case JACK -> total++;
+                case QUEEN -> total += 2;
+                case KING -> total += 3;
+                case ACE -> total += 4;
                 default -> { }
             }
         }
@@ -118,57 +160,30 @@ public class Hand {
         distributionPoints = total;
     }
 
-    public void calculateHighSpades() {
-        highSpades = (int) cards.stream().filter(card ->
-                card == Card.ACE_SPADES ||
-                card == Card.KING_SPADES ||
-                card == Card.QUEEN_SPADES ||
-                card == Card.JACK_SPADES ||
-                card == Card.TEN_SPADES).count();
+    public int calculateHighCardsFor(Suit suit) {
+        List<Rank> ranks = List.of(Rank.ACE, Rank.KING, Rank.QUEEN, Rank.JACK, Rank.TEN);
+        long count = cards.stream().filter(card -> card.getSuit() == suit)
+                .map(Card::getRank)
+                .filter(ranks::contains)
+                .count();
+
+        return (int) count;
     }
 
-    public void calculateHighHearts() {
-        highHearts = (int) cards.stream().filter(card ->
-                card == Card.ACE_HEARTS ||
-                        card == Card.KING_HEARTS ||
-                        card == Card.QUEEN_HEARTS ||
-                        card == Card.JACK_HEARTS ||
-                        card == Card.TEN_HEARTS).count();
-    }
-
-    public void calculateHighDiamonds() {
-        highDiamonds = (int) cards.stream().filter(card ->
-                card == Card.ACE_DIAMONDS ||
-                        card == Card.KING_DIAMONDS ||
-                        card == Card.QUEEN_DIAMONDS ||
-                        card == Card.JACK_DIAMONDS ||
-                        card == Card.TEN_DIAMONDS).count();
-    }
-
-    public void calculateHighClubs() {
-        highClubs = (int) cards.stream().filter(card ->
-                card == Card.ACE_CLUBS ||
-                        card == Card.KING_CLUBS ||
-                        card == Card.QUEEN_CLUBS ||
-                        card == Card.JACK_CLUBS ||
-                        card == Card.TEN_CLUBS).count();
+    private void calculateHighCards() {
+        highSpades = calculateHighCardsFor(Suit.SPADES);
+        highHearts = calculateHighCardsFor(Suit.HEARTS);
+        highDiamonds = calculateHighCardsFor(Suit.DIAMONDS);
+        highClubs = calculateHighCardsFor(Suit.CLUBS);
     }
 
 
     public void calculateKings() {
-        kings = (int) cards.stream().filter(card ->
-                card == Card.KING_DIAMONDS ||
-                card == Card.KING_CLUBS ||
-                card == Card.KING_HEARTS ||
-                card == Card.KING_SPADES).count();
+        kings = (int) cards.stream().filter(card -> card.getRank() == Rank.KING).count();
     }
 
     public void calculateAces() {
-        aces = (int) cards.stream().filter(card ->
-                card == Card.ACE_DIAMONDS ||
-                        card == Card.ACE_CLUBS ||
-                        card == Card.ACE_HEARTS ||
-                        card == Card.ACE_SPADES).count();
+        aces = (int) cards.stream().filter(card -> card.getRank() == Rank.ACE).count();
     }
 
     public void updateCanOpen(int totalPointCount) {
@@ -257,6 +272,10 @@ public class Hand {
         return highClubs;
     }
 
+    public double getQuickTricks() {
+        return quickTricks;
+    }
+
     @Override
     public String toString() {
         return "Hand{" +
@@ -270,6 +289,7 @@ public class Hand {
                 ", spades=" + spades +
                 ", aces=" + aces +
                 ", kings=" + kings +
+                ", quickTricks=" + quickTricks +
                 '}';
     }
 }

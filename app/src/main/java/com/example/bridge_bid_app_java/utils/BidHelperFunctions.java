@@ -41,6 +41,14 @@ public class BidHelperFunctions {
         return game.getHand().getTotalPointCount() <= value;
     }
 
+    public static boolean isQuickTricksGreaterThanOrEqualTo(double value) {
+        return game.getHand().getQuickTricks() >= value;
+    }
+
+    public static boolean isPartnerBidEqualTo(BidSelection selection) {
+        return bidSelection == selection;
+    }
+
     public static boolean is4432or4441Split() {
         Hand hand = game.getHand();
 

@@ -24,7 +24,7 @@ public class Game {
         unbidSuits.remove(suit);
     }
 
-    public void updateUnbidSuitsBidsForAll(List<Suit> suits) {
+    public void updateBidSuitsForAll(List<Suit> suits) {
         unbidSuits.removeAll(suits);
     }
 
