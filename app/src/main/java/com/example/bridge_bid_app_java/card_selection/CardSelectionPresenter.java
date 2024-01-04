@@ -1,5 +1,7 @@
 package com.example.bridge_bid_app_java.card_selection;
 
+import static com.example.bridge_bid_app_java.utils.TargetHandGenerator.createAndFillAndRandomHand;
+
 import android.widget.ImageView;
 
 import com.example.bridge_bid_app_java.R;
@@ -11,11 +13,18 @@ import com.google.gson.Gson;
 
 public class CardSelectionPresenter {
     private final CardSelectionInterface view;
-    private final Hand hand = new Hand();
+    private Hand hand = new Hand();
     private final Game game = new Game();
 
     public CardSelectionPresenter(CardSelectionInterface view) {
         this.view = view;
+    }
+
+    public void createRandomHand() {
+        Card.resetCards();
+        hand = createAndFillAndRandomHand();
+        view.setCardCounterTextView(hand.getCards().size());
+        view.setTotalPointCounter(hand.getTotalPointCount());
     }
 
     public ImageView onCardPressed(ImageView cardImage, Card card) {

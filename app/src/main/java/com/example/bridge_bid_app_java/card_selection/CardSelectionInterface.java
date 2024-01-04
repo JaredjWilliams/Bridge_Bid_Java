@@ -6,6 +6,8 @@ public interface CardSelectionInterface {
 
     void updateCardGrid(Suit suit, boolean update);
 
+    void removeCardFromCardGrid();
+
     void setCardCounterTextView(int count);
 
     void setTotalPointCounter(int count);

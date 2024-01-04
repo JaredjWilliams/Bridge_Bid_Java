@@ -1,5 +1,8 @@
 package com.example.bridge_bid_app_java.bid_selection;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -9,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.example.bridge_bid_app_java.R;
 import com.example.bridge_bid_app_java.game.BidSelection;
@@ -42,38 +44,65 @@ public class BidSelectionActivity extends AppCompatActivity implements BidSelect
     }
 
     private void initializeViews() {
-        createCurrentPlayerText(presenter.getGame().getDealer().name());
-        initializeBidGridView();
+        updateCurrentPlayerText(presenter.getGame().getDealer().name());
+        updateSuggestedBidText(null);
+        updateBidGridView(false);
     }
 
-    private void createCurrentPlayerText(String name) {
+    @Override
+    public void updateSuggestedBidText(String bidName) {
+        if (bidName != null) {
+            suggestedBid.setText("Suggested Bid: " + bidName);
+        }
+    }
+
+    @Override
+    public void updateCurrentPlayerText(String name) {
         currentPlayer.setText(name);
     }
 
-    private void initializeBidGridView() {
+    @Override
+    public void updateBidGridView(boolean update) {
         ViewGroup.MarginLayoutParams params = new ViewGroup.MarginLayoutParams(200, 200);
         params.setMargins(10,10,10,10);
+
+        if (update) {
+            removeBidsForGrid();
+        }
 
         for (BidSelection bidSelection : BidSelection.values()) {
             createBid(bidSelection, params);
         }
     }
 
+    private void removeBidsForGrid() {
+        bidGrid.removeAllViews();
+    }
+
     private void createBid(BidSelection bidSelection, ViewGroup.LayoutParams params) {
         TextView bidImage = new TextView(this);
 
         bidImage.setPadding(10, 10, 10, 10);
-        bidImage.setBackground(ContextCompat.getDrawable(this, bidSelection.getImage()));
+        bidImage.setBackgroundResource(bidSelection.getImage());
         bidImage.setLayoutParams(params);
         bidImage.setElevation(4.0f);
         bidImage.setText(bidSelection.getName());
         bidImage.setGravity(Gravity.CENTER);
         bidImage.setTextColor(bidSelection.getColor());
 
+        Drawable backgroundDrawable = getResources().getDrawable(bidSelection.getImage()).mutate();
+        bidImage.setBackground(backgroundDrawable);
+
+        if (!bidSelection.getEnabled()) {
+            System.out.println(bidSelection);
+            bidImage.getBackground().setColorFilter(Color.GRAY, PorterDuff.Mode.SRC_ATOP);
+        }
+
+
         bidImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                presenter.onBidClicked(bidSelection);
             }
         });
 
@@ -86,6 +115,7 @@ public class BidSelectionActivity extends AppCompatActivity implements BidSelect
         if (gameJSON != null) {
             Game game = Game.fromJson(gameJSON);
             presenter.setGame(game);
+            presenter.createBidGenerator();
         }
     }
 

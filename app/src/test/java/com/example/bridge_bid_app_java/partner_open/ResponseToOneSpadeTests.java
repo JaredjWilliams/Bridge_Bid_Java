@@ -26,12 +26,15 @@ public class ResponseToOneSpadeTests {
     public void setUp() {
         game = new Game();
         game.setOpener(Player.PARTNER);
+        Player.PARTNER.addToBidHistory(BidSelection.ONE_SPADE);
+        game.addBidToHistory(BidSelection.ONE_SPADE);
+        bidGenerator = new BidGenerator(game);
     }
 
     @Test
     public void testOneNT() {
         game.setHand(createTargetedHand(6, 2, 4, 4, 3));
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.ONE_NO_TRUMP, bidGenerator.getRecommendedBid());
@@ -40,7 +43,7 @@ public class ResponseToOneSpadeTests {
     @Test
     public void testTwoClubs() {
         game.setHand(createTargetedHand(10, 2, 3, 2, 6));
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_CLUBS, bidGenerator.getRecommendedBid());
@@ -49,7 +52,7 @@ public class ResponseToOneSpadeTests {
     @Test
     public void testTwoDiamonds() {
         game.setHand(createTargetedHand(10, 2, 3, 6, 2));
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_DIAMONDS, bidGenerator.getRecommendedBid());
@@ -61,7 +64,7 @@ public class ResponseToOneSpadeTests {
     @Test
     public void testTwoDiamondsAlternate() {
         game.setHand(createTargetedHand(10, 2, 3, 5, 3));
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_DIAMONDS, bidGenerator.getRecommendedBid());
@@ -70,7 +73,7 @@ public class ResponseToOneSpadeTests {
     @Test
     public void testTwoHearts() {
         game.setHand(createTargetedHand(10, 2, 6, 2, 3));
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_HEARTS, bidGenerator.getRecommendedBid());
@@ -79,7 +82,7 @@ public class ResponseToOneSpadeTests {
     @Test
     public void testTwoHeartAlternate() {
         game.setHand(createTargetedHand(10, 2, 5, 3, 3));
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_HEARTS, bidGenerator.getRecommendedBid());
@@ -88,7 +91,7 @@ public class ResponseToOneSpadeTests {
     @Test
     public void testTwoSpades() {
         game.setHand(createTargetedHand(6, 3, 3, 4, 3));
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_SPADES, bidGenerator.getRecommendedBid());
@@ -101,7 +104,7 @@ public class ResponseToOneSpadeTests {
 
         game.setHand(hand);
         game.updateBidSuitsForAll(List.of(Suit.HEARTS, Suit.CLUBS));
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
 
         System.out.println(game.getHand());
 
@@ -113,7 +116,7 @@ public class ResponseToOneSpadeTests {
         Hand hand = createTargetedHand(10, 2, 2, 2, 7);
 
         game.setHand(hand);
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_CLUBS, bidGenerator.getRecommendedBid());
@@ -124,7 +127,7 @@ public class ResponseToOneSpadeTests {
         Hand hand = createTargetedHand(10, 2, 2, 7, 2);
 
         game.setHand(hand);
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_DIAMONDS, bidGenerator.getRecommendedBid());
@@ -135,7 +138,7 @@ public class ResponseToOneSpadeTests {
         Hand hand = createTargetedHand(10, 2, 7, 2, 2);
 
         game.setHand(hand);
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_HEARTS, bidGenerator.getRecommendedBid());
@@ -146,7 +149,7 @@ public class ResponseToOneSpadeTests {
         Hand hand = createTargetedHand(13, 3, 3, 4, 3);
 
         game.setHand(hand);
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_SPADES, bidGenerator.getRecommendedBid());
@@ -157,7 +160,7 @@ public class ResponseToOneSpadeTests {
         Hand hand = createTargetedHand(16, 3, 3, 4, 3);
 
         game.setHand(hand);
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_NO_TRUMP, bidGenerator.getRecommendedBid());
@@ -168,7 +171,7 @@ public class ResponseToOneSpadeTests {
         Hand hand = createTargetedHand(10, 1, 8, 2, 2);
 
         game.setHand(hand);
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FOUR_HEARTS, bidGenerator.getRecommendedBid());
@@ -179,7 +182,7 @@ public class ResponseToOneSpadeTests {
         Hand hand = createTargetedHand(10, 5, 3, 3, 2);
 
         game.setHand(hand);
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FOUR_SPADES, bidGenerator.getRecommendedBid());
@@ -190,7 +193,7 @@ public class ResponseToOneSpadeTests {
         Hand hand = createTargetedHand(13, 2,2, 1, 8);
 
         game.setHand(hand);
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FIVE_CLUBS, bidGenerator.getRecommendedBid());
@@ -201,7 +204,7 @@ public class ResponseToOneSpadeTests {
         Hand hand = createTargetedHand(13, 2,2, 8, 1);
 
         game.setHand(hand);
-        bidGenerator = new BidGenerator(BidSelection.ONE_SPADE, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FIVE_DIAMONDS, bidGenerator.getRecommendedBid());

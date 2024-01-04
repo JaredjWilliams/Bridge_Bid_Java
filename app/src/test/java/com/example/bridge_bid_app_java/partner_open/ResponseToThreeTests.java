@@ -24,7 +24,7 @@ public class ResponseToThreeTests {
     public void setUp() {
         game = new Game();
         game.setOpener(Player.PARTNER);
-        bidGenerator = new BidGenerator(BidSelection.PASS, game);
+        bidGenerator = new BidGenerator(game);
     }
 
     // WHEN: Quick Tricks is greater than or equal to 5
@@ -39,7 +39,10 @@ public class ResponseToThreeTests {
         game.setHand(createTargetedHandWith(20, 5, 3, 3, 2,
                 included));
 
-        bidGenerator.updateRecommendedBid(BidSelection.THREE_CLUBS, game);
+        Player.PARTNER.addToBidHistory(BidSelection.THREE_CLUBS);
+        game.addBidToHistory(BidSelection.THREE_CLUBS);
+
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FIVE_CLUBS, bidGenerator.getRecommendedBid());
@@ -51,7 +54,9 @@ public class ResponseToThreeTests {
     @Test
     public void testPass() {
         game.setHand(createTargetedHandWithTargetedQuickTricks(4, 4, 4, 3, 2));
-        bidGenerator.updateRecommendedBid(BidSelection.THREE_CLUBS, game);
+        Player.PARTNER.addToBidHistory(BidSelection.THREE_CLUBS);
+        game.addBidToHistory(BidSelection.THREE_CLUBS);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.PASS, bidGenerator.getRecommendedBid());
@@ -63,8 +68,9 @@ public class ResponseToThreeTests {
     @Test
     public void testThreeDiamonds() {
         game.setHand(createTargetedHandWithTargetedQuickTricks(5, 4, 4, 1, 4));
-
-        bidGenerator.updateRecommendedBid(BidSelection.THREE_DIAMONDS, game);
+        Player.PARTNER.addToBidHistory(BidSelection.THREE_DIAMONDS);
+        game.addBidToHistory(BidSelection.THREE_DIAMONDS);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FIVE_DIAMONDS, bidGenerator.getRecommendedBid());
@@ -76,8 +82,9 @@ public class ResponseToThreeTests {
     @Test
     public void testPassForThreeDiamonds() {
         game.setHand(createTargetedHandWithTargetedQuickTricks(4, 4, 4, 1, 4));
-
-        bidGenerator.updateRecommendedBid(BidSelection.THREE_DIAMONDS, game);
+        Player.PARTNER.addToBidHistory(BidSelection.THREE_DIAMONDS);
+        game.addBidToHistory(BidSelection.THREE_DIAMONDS);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.PASS, bidGenerator.getRecommendedBid());
@@ -89,8 +96,9 @@ public class ResponseToThreeTests {
     @Test
     public void testFourSpades() {
         game.setHand(createTargetedHandWithTargetedQuickTricks(4, 1, 4, 4, 4));
-
-        bidGenerator.updateRecommendedBid(BidSelection.THREE_SPADES, game);
+        Player.PARTNER.addToBidHistory(BidSelection.THREE_SPADES);
+        game.addBidToHistory(BidSelection.THREE_SPADES);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FOUR_SPADES, bidGenerator.getRecommendedBid());
@@ -102,8 +110,9 @@ public class ResponseToThreeTests {
     @Test
     public void testPassForThreeSpades() {
         game.setHand(createTargetedHandWithTargetedQuickTricks(3, 1, 4, 4, 4));
-
-        bidGenerator.updateRecommendedBid(BidSelection.THREE_SPADES, game);
+        Player.PARTNER.addToBidHistory(BidSelection.THREE_SPADES);
+        game.addBidToHistory(BidSelection.THREE_SPADES);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.PASS, bidGenerator.getRecommendedBid());
@@ -115,8 +124,9 @@ public class ResponseToThreeTests {
     @Test
     public void testFourHearts() {
         game.setHand(createTargetedHandWithTargetedQuickTricks(4, 4, 1, 4, 4));
-
-        bidGenerator.updateRecommendedBid(BidSelection.THREE_HEARTS, game);
+        Player.PARTNER.addToBidHistory(BidSelection.THREE_HEARTS);
+        game.addBidToHistory(BidSelection.THREE_HEARTS);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FOUR_HEARTS, bidGenerator.getRecommendedBid());

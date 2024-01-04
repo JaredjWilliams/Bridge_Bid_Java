@@ -10,6 +10,10 @@ import java.util.Random;
 
 public class TargetHandGenerator {
 
+    public static Hand createAndFillAndRandomHand() {
+        return new Hand(createRandomHand());
+    }
+
     private static List<Card> createRandomHand() {
         List<Card> hand = new ArrayList<>();
         List<Card> cards = new ArrayList<>(Arrays.asList(Card.values()));

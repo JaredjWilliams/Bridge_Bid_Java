@@ -19,30 +19,14 @@ public class BidGenerator {
     private final ResponseToTwoNTBid twoNTBids = new ResponseToTwoNTBid();
     private final OpenBids openBids = new OpenBids();
 
-
-
-    private BidSelection bidSelection;
     private Game game;
     private BidSelection recommendedBid;
     private BidHelperFunctions bidHelperFunctions;
 
-    public BidGenerator(BidSelection bidSelection, Game game) {
-        this.bidSelection = bidSelection;
+    public BidGenerator(Game game) {
         this.game = game;
 
-        bidHelperFunctions = new BidHelperFunctions(bidSelection, game);
-
-        recommendedBid = createRecommendedBid();
-    }
-
-    public void updateRecommendedBid(BidSelection bidSelection, Game game) {
-        this.bidSelection = bidSelection;
-        this.game = game;
-
-        BidHelperFunctions.setGame(game);
-        BidHelperFunctions.setBidSelection(bidSelection);
-
-        recommendedBid = createRecommendedBid();
+        bidHelperFunctions = new BidHelperFunctions(game);
     }
 
     public void updateRecommendedBid(Game game) {
@@ -54,7 +38,7 @@ public class BidGenerator {
     }
 
     public BidSelection createRecommendedBid() {
-        if (isBidSelectionNull() && userCanOpen()) {
+        if (isBidHistoryEmpty() && userCanOpen()) {
             return openBids.getRecommendedBid();
         }
         if (didPlayerOpen(Player.PARTNER)) {
@@ -69,7 +53,7 @@ public class BidGenerator {
     }
 
     public BidSelection respondToPartnerBid() {
-        return switch (bidSelection) {
+        return switch (Player.PARTNER.getLastBid()) {
             case ONE_CLUB, ONE_DIAMOND -> oneClubDiamondBids.getRecommendedBid();
             case ONE_HEART -> oneHeartResponses.getRecommendedBid();
             case ONE_SPADE -> oneSpadeBids.getRecommendedBid();
@@ -108,8 +92,8 @@ public class BidGenerator {
         return game.getOpener() == Player.LEFT_OPPONENT || game.getOpener() == Player.RIGHT_OPPONENT;
     }
 
-    private boolean isBidSelectionNull() {
-        return bidSelection == null;
+    private boolean isBidHistoryEmpty() {
+        return game.getBidHistoryLength() == 0;
     }
 
     private boolean userCanOpen() {

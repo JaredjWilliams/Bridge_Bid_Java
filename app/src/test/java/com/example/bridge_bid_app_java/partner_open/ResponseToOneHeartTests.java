@@ -27,13 +27,16 @@ public class ResponseToOneHeartTests {
     public void setUp() {
         game = new Game();
         game.setOpener(Player.PARTNER);
+        Player.PARTNER.addToBidHistory(BidSelection.ONE_HEART);
+        game.addBidToHistory(BidSelection.ONE_HEART);
+        bidGenerator = new BidGenerator(game);
     }
 
     @Test
     public void testOneSpade() {
         List<Card> cardsLeftOut = List.of(Card.ACE_HEARTS, Card.KING_HEARTS, Card.QUEEN_HEARTS, Card.JACK_HEARTS);
         game.setHand(createTargetedHandWithout(6, 5, 2, 3, 3, cardsLeftOut));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.ONE_SPADE, bidGenerator.getRecommendedBid());
@@ -43,7 +46,7 @@ public class ResponseToOneHeartTests {
     public void testOneNT() {
         List<Card> cardsLeftOut = List.of(Card.ACE_HEARTS, Card.KING_HEARTS, Card.QUEEN_HEARTS, Card.JACK_HEARTS);
         game.setHand(createTargetedHandWithout(6, 4, 2, 4, 3, cardsLeftOut));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.ONE_NO_TRUMP, bidGenerator.getRecommendedBid());
@@ -53,7 +56,7 @@ public class ResponseToOneHeartTests {
     public void testTwoClubs() {
         List<Card> cardsLeftOut = List.of(Card.ACE_HEARTS, Card.KING_HEARTS, Card.QUEEN_HEARTS, Card.JACK_HEARTS);
         game.setHand(createTargetedHandWithout(10, 3, 2, 2, 6, cardsLeftOut));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_CLUBS, bidGenerator.getRecommendedBid());
@@ -63,7 +66,7 @@ public class ResponseToOneHeartTests {
     public void testTwoDiamonds() {
         List<Card> cardsLeftOut = List.of(Card.ACE_HEARTS, Card.KING_HEARTS, Card.QUEEN_HEARTS, Card.JACK_HEARTS);
         game.setHand(createTargetedHandWithout(10, 3, 2, 6, 2, cardsLeftOut));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_DIAMONDS, bidGenerator.getRecommendedBid());
@@ -72,7 +75,7 @@ public class ResponseToOneHeartTests {
     @Test
     public void testTwoHearts() {
         game.setHand(createTargetedHand(6, 3, 3, 4, 3));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_HEARTS, bidGenerator.getRecommendedBid());
@@ -82,7 +85,7 @@ public class ResponseToOneHeartTests {
     public void testTwoSpades() {
         List<Card> cardsLeftOut = List.of(Card.ACE_HEARTS, Card.KING_HEARTS, Card.QUEEN_HEARTS, Card.JACK_HEARTS);
         game.setHand(createTargetedHandWithout(6, 6, 2, 2, 3, cardsLeftOut));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_SPADES, bidGenerator.getRecommendedBid());
@@ -92,7 +95,7 @@ public class ResponseToOneHeartTests {
     public void testTwoSpadesAlternate() {
         List<Card> cardsLeftOut = List.of(Card.ACE_HEARTS, Card.KING_HEARTS, Card.QUEEN_HEARTS, Card.JACK_HEARTS);
         game.setHand(createTargetedHandWithout(10, 5, 2, 3, 3, cardsLeftOut));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_SPADES, bidGenerator.getRecommendedBid());
@@ -107,7 +110,7 @@ public class ResponseToOneHeartTests {
 
         game.setHand(hand);
         game.updateBidSuitsForAll(List.of(Suit.HEARTS, Suit.SPADES));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
 
         System.out.println(game.getHand());
 
@@ -120,7 +123,7 @@ public class ResponseToOneHeartTests {
 
         game.setHand(createTargetedHandWithout(10, 2, 2, 2, 7, cardsLeftOut));
 
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_CLUBS, bidGenerator.getRecommendedBid());
@@ -131,7 +134,7 @@ public class ResponseToOneHeartTests {
         List<Card> cardsLeftOut = List.of(Card.ACE_HEARTS, Card.KING_HEARTS, Card.QUEEN_HEARTS, Card.JACK_HEARTS);
 
         game.setHand(createTargetedHandWithout(10, 2, 2, 7, 2, cardsLeftOut));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_DIAMONDS, bidGenerator.getRecommendedBid());
@@ -141,7 +144,7 @@ public class ResponseToOneHeartTests {
     public void testResponseBidThreeHearts() {
 
         game.setHand(createTargetedHand(13, 4, 3, 3, 3));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_HEARTS, bidGenerator.getRecommendedBid());
@@ -150,7 +153,7 @@ public class ResponseToOneHeartTests {
     @Test
     public void testResponseBidThreeSpades() {
         game.setHand(createTargetedHand(10, 7, 2, 3, 1));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_SPADES, bidGenerator.getRecommendedBid());
@@ -159,7 +162,7 @@ public class ResponseToOneHeartTests {
     @Test
     public void testResponseBidThreeNT() {
         game.setHand(createTargetedHand(16, 3, 2, 4, 4));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_NO_TRUMP, bidGenerator.getRecommendedBid());
@@ -168,7 +171,7 @@ public class ResponseToOneHeartTests {
     @Test
     public void testResponseBidFourHearts() {
         game.setHand(createTargetedHand(10, 3, 5, 3, 2));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FOUR_HEARTS, bidGenerator.getRecommendedBid());
@@ -177,7 +180,7 @@ public class ResponseToOneHeartTests {
     @Test
     public void testResponseBidFourSpades() {
         game.setHand(createTargetedHand(10, 8, 2, 2, 1));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FOUR_SPADES, bidGenerator.getRecommendedBid());
@@ -186,7 +189,7 @@ public class ResponseToOneHeartTests {
     @Test
     public void testResponseBidFiveClubs() {
         game.setHand(createTargetedHand(13, 2, 2, 1, 8));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FIVE_CLUBS, bidGenerator.getRecommendedBid());
@@ -195,7 +198,7 @@ public class ResponseToOneHeartTests {
     @Test
     public void testResponseBidFiveDiamonds() {
         game.setHand(createTargetedHand(13, 2, 2, 8, 1));
-        bidGenerator = new BidGenerator(BidSelection.ONE_HEART, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FIVE_DIAMONDS, bidGenerator.getRecommendedBid());

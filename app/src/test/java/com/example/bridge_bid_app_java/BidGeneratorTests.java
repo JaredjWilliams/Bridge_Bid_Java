@@ -26,7 +26,8 @@ public class BidGeneratorTests {
         Game game = new Game();
         Hand hand = new Hand(mockFullHand);
         game.setHand(hand);
-        BidGenerator bidGenerator = new BidGenerator(null, game);
+        BidGenerator bidGenerator = new BidGenerator(game);
+        bidGenerator.updateRecommendedBid(game);
 
         System.out.println(createTargetedHand(13, 2, 2, 2, 7));
 
