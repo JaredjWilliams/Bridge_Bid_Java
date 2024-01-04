@@ -1,4 +1,4 @@
-package com.example.bridge_bid_app_java;
+package com.example.bridge_bid_app_java.presenter_tests;
 
 import com.example.bridge_bid_app_java.card_selection.CardSelectionInterface;
 import com.example.bridge_bid_app_java.card_selection.CardSelectionPresenter;

@@ -10,14 +10,28 @@ import java.util.List;
 
 public class Game {
 
-    private final List<BidSelection> bidSelectionHistory = List.of();
+    private final List<BidSelection> bidSelectionHistory = new ArrayList<>();
     private final List<Suit> unbidSuits = new ArrayList<>(Arrays.asList(Suit.CLUBS, Suit.DIAMONDS, Suit.HEARTS, Suit.SPADES));
     private Player dealer;
     private Hand hand;
     private Player opener;
+    private Player currentPlayer;
 
     public Game() {
 
+    }
+
+    public void addBidToHistory(BidSelection bidSelection) {
+        bidSelectionHistory.add(bidSelection);
+    }
+
+    public void updateCurrentPlayer() {
+        switch (currentPlayer) {
+            case USER -> { this.currentPlayer = Player.LEFT_OPPONENT; }
+            case LEFT_OPPONENT -> { this.currentPlayer = Player.PARTNER; }
+            case PARTNER -> { this.currentPlayer = Player.RIGHT_OPPONENT; }
+            case RIGHT_OPPONENT -> {this.currentPlayer = Player.USER; }
+        }
     }
 
     public void updateUnbidSuitsBid(Suit suit) {
@@ -28,9 +42,20 @@ public class Game {
         unbidSuits.removeAll(suits);
     }
 
+    public BidSelection getLastBid() {
+        if (bidSelectionHistory.size() < 1) {
+            return null;
+        }
+        return bidSelectionHistory.get(bidSelectionHistory.size() - 1);
+    }
+
+    public int getBidHistoryLength() {
+        return bidSelectionHistory.size();
+    }
 
     public void setDealer(Player dealer) {
         this.dealer = dealer;
+        setCurrentPlayer(dealer);
     }
 
     public void setHand(Hand hand) {
@@ -38,10 +63,6 @@ public class Game {
     }
 
     public Hand getHand() { return hand; }
-
-    public void addBid(BidSelection bidSelection) {
-        bidSelectionHistory.add(bidSelection);
-    }
 
     public Player getDealer() {
         return dealer;
@@ -61,5 +82,13 @@ public class Game {
 
     public void setOpener(Player opener) {
         this.opener = opener;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
     }
 }

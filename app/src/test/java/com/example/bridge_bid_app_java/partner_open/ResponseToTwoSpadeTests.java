@@ -20,13 +20,14 @@ public class ResponseToTwoSpadeTests {
     public void setUp() {
         game = new Game();
         game.setOpener(Player.PARTNER);
-        bidGenerator = new BidGenerator(BidSelection.PASS, game);
+        updateBids();
+        bidGenerator = new BidGenerator(game);
     }
 
     @Test
     public void testTwoNT() {
         game.setHand(createTargetedHand(6, 5, 1, 4, 3));
-        bidGenerator.updateRecommendedBid(BidSelection.TWO_SPADES, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.TWO_NO_TRUMP, bidGenerator.getRecommendedBid());
@@ -35,7 +36,7 @@ public class ResponseToTwoSpadeTests {
     @Test
     public void testThreeSpades() {
         game.setHand(createTargetedHand(7, 7, 3, 3, 4, 3));
-        bidGenerator.updateRecommendedBid(BidSelection.TWO_SPADES, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.THREE_SPADES, bidGenerator.getRecommendedBid());
@@ -44,9 +45,14 @@ public class ResponseToTwoSpadeTests {
     @Test
     public void testFourSpades() {
         game.setHand(createTargetedHand(10, 3, 3, 4, 3));
-        bidGenerator.updateRecommendedBid(BidSelection.TWO_SPADES, game);
+        bidGenerator.updateRecommendedBid(game);
         System.out.println(game.getHand());
 
         assertEquals(BidSelection.FOUR_SPADES, bidGenerator.getRecommendedBid());
+    }
+
+    private void updateBids() {
+        Player.PARTNER.addToBidHistory(BidSelection.TWO_SPADES);
+        game.addBidToHistory(BidSelection.TWO_SPADES);
     }
 }

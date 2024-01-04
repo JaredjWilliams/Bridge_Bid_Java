@@ -2,6 +2,7 @@ package com.example.bridge_bid_app_java.utils;
 
 import com.example.bridge_bid_app_java.game.BidSelection;
 import com.example.bridge_bid_app_java.game.Game;
+import com.example.bridge_bid_app_java.game.Player;
 import com.example.bridge_bid_app_java.playing_cards.Hand;
 import com.example.bridge_bid_app_java.playing_cards.Suit;
 
@@ -11,13 +12,9 @@ import java.util.List;
 
 public class BidHelperFunctions {
 
-
-
-    private static BidSelection bidSelection;
     public static Game game;
 
-    public BidHelperFunctions(BidSelection bidSelection, Game game) {
-        this.bidSelection = bidSelection;
+    public BidHelperFunctions(Game game) {
         this.game = game;
     }
 
@@ -30,7 +27,10 @@ public class BidHelperFunctions {
     }
 
     public static boolean isOrdinalGreater(BidSelection selection) {
-        return bidSelection.ordinal() < selection.ordinal();
+        if (game.getLastBid() == null) {
+            return true;
+        }
+        return game.getLastBid().ordinal() < selection.ordinal();
     }
 
     public static boolean isTotalPointsGreaterOrEqualTo(int value) {
@@ -46,7 +46,7 @@ public class BidHelperFunctions {
     }
 
     public static boolean isPartnerBidEqualTo(BidSelection selection) {
-        return bidSelection == selection;
+        return Player.PARTNER.getLastBid() == selection;
     }
 
     public static boolean is4432or4441Split() {
@@ -105,10 +105,6 @@ public class BidHelperFunctions {
         boolean are4SpadesHeld = game.getHand().getSpades() == 4;
         boolean are4HeartsHeld = game.getHand().getHearts() == 4;
         return are4HeartsHeld || are4SpadesHeld;
-    }
-
-    public static void setBidSelection(BidSelection bidSelection) {
-        BidHelperFunctions.bidSelection = bidSelection;
     }
 
     public static void setGame(Game game) {

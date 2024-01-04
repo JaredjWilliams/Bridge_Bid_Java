@@ -74,6 +74,12 @@ public enum Card {
         this.rank = rank;
     }
 
+    public static void resetCards() {
+        for (Card card : Card.values()) {
+            card.isSelected = false;
+        }
+    }
+
     public void isSelected(boolean selected) {
         isSelected = selected;
     }

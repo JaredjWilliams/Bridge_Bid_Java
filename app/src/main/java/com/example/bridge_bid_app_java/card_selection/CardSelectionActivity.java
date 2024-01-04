@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
@@ -25,7 +24,7 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
     CardSelectionPresenter presenter = new CardSelectionPresenter(this);
     private final Suit currentSuit = Suit.CLUBS;
 
-    private CheckBox partnerStrongOrWeak2BidBox;
+    private Button createRandomHandButton;
     private TextView totalPointCounterTextView;
     private RadioButton rightOpponentButton;
     private RadioButton leftOpponentButton;
@@ -48,18 +47,22 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
         createSuitSelectionImages();
         createRadioButtons();
         createNextButton();
+        createRandomHandButton();
+        setCardCounterTextView(0);
+        setTotalPointCounter(0);
     }
 
     private void setupViews() {
         totalPointCounterTextView = findViewById(R.id.total_point_counter);
         rightOpponentButton = findViewById(R.id.right_opp_radio_button);
         leftOpponentButton = findViewById(R.id.left_opp_radio_button);
-        partnerStrongOrWeak2BidBox = findViewById( R.id.strong_open);
         partnerButton = findViewById(R.id.partner_radio_button);
         cardCounterTextView = findViewById(R.id.card_counter);
         userButton = findViewById(R.id.user_radio_button);
         cardGrid = findViewById(R.id.card_selection);
         nextButton = findViewById(R.id.next_button);
+
+        createRandomHandButton = findViewById(R.id.random_hand_button);
     }
 
     private void createSuitSelectionImages() {
@@ -74,6 +77,16 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
         createRadioButton(leftOpponentButton, Player.LEFT_OPPONENT);
         createRadioButton(partnerButton, Player.PARTNER);
         createRadioButton(userButton, Player.USER);
+    }
+
+    private void createRandomHandButton() {
+        createRandomHandButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.createRandomHand();
+                updateCardGrid(Suit.CLUBS, true);
+            }
+        });
     }
 
     private void createNextButton() {
@@ -131,7 +144,7 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
         params.setMargins(10, 10, 10, 10);
 
         if (update) {
-            cardGrid.removeAllViews();
+            removeCardFromCardGrid();
         }
 
         for (Card card : Card.values()) {
@@ -139,6 +152,11 @@ public class CardSelectionActivity extends AppCompatActivity implements CardSele
                 createCardGrid(cardGrid, params, card);
             }
         }
+    }
+
+    @Override
+    public void removeCardFromCardGrid() {
+        cardGrid.removeAllViews();
     }
 
     private void createCardGrid(GridLayout cardGrid, ViewGroup.LayoutParams params, Card card) {
