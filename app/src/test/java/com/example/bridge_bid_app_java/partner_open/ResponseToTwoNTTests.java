@@ -19,7 +19,7 @@ public class ResponseToTwoNTTests {
     @Before
     public void setUp() {
         game = new Game();
-        game.setOpener(Player.PARTNER);
+        game.addOpener(Player.PARTNER);
         Player.PARTNER.addToBidHistory(BidSelection.TWO_NO_TRUMP);
         game.addBidToHistory(BidSelection.TWO_NO_TRUMP);
         bidGenerator = new BidGenerator(game);

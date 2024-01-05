@@ -7,17 +7,18 @@ import com.example.bridge_bid_app_java.game.Player;
 
 public class BidSelectionPresenter {
 
-    private BidGenerator generator;
-    private BidSelectionInterface view;
+    private final BidSelectionInterface view;
     private Game game;
+    private BidGenerator generator;
 
     public BidSelectionPresenter(BidSelectionInterface view) {
         this.view = view;
+        generator = new BidGenerator(game);
     }
 
     public void getSuggestedBid() {
         generator.updateRecommendedBid(game);
-        view.updateSuggestedBidText(generator.getRecommendedBid().getName());
+        view.updateSuggestedBidText(generator.getRecommendedBid().getNameOfBid());
     }
 
     public void createBidGenerator() {
@@ -35,18 +36,10 @@ public class BidSelectionPresenter {
     }
 
     private void updateGame(BidSelection bidSelection) {
-
-        if (isCurrentPlayerOpening(bidSelection)) {
-            game.getCurrentPlayer().setOpened(true);
-        }
-
-        game.addBidToHistory(bidSelection);
-        game.getCurrentPlayer().addToBidHistory(bidSelection);
-        game.updateCurrentPlayer();
-    }
-
-    private boolean isCurrentPlayerOpening(BidSelection bidSelection) {
-        return isBidHistoryLessThan(5) && bidSelection != BidSelection.PASS;
+        addBidSelectionToGameBidHistory(bidSelection);
+        addBidSelectionToCurrentPlayerBidHistory(bidSelection);
+        setCurrentPlayerOpenBasedOn(game);
+        updateCurrentPlayerOf(game);
     }
 
     private void updateView() {
@@ -60,14 +53,25 @@ public class BidSelectionPresenter {
         }
     }
 
+    private void updateCurrentPlayerOf(Game game) {
+        game.updateCurrentPlayer();
+    }
 
+    private void setCurrentPlayerOpenBasedOn(Game game) {
+        System.out.println(game.getLastBid());
+        game.getCurrentPlayer().setOpened(game);
+    }
+
+    private void addBidSelectionToGameBidHistory(BidSelection bidSelection) {
+        game.addBidToHistory(bidSelection);
+    }
+
+    private void addBidSelectionToCurrentPlayerBidHistory(BidSelection bidSelection) {
+        game.getCurrentPlayer().addToBidHistory(bidSelection);
+    }
 
     public String currentPlayerName() {
         return game.getCurrentPlayer().name();
-    }
-
-    private boolean isBidHistoryLessThan(int value) {
-        return game.getBidHistoryLength() < value;
     }
 
     public Game getGame() {

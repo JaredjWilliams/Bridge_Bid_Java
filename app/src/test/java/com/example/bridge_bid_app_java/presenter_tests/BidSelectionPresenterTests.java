@@ -2,12 +2,14 @@ package com.example.bridge_bid_app_java.presenter_tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import com.example.bridge_bid_app_java.bid_selection.BidSelectionInterface;
 import com.example.bridge_bid_app_java.bid_selection.BidSelectionPresenter;
 import com.example.bridge_bid_app_java.game.BidSelection;
 import com.example.bridge_bid_app_java.game.Game;
 import com.example.bridge_bid_app_java.game.Player;
+import com.example.bridge_bid_app_java.utils.TargetHandGenerator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +30,24 @@ public class BidSelectionPresenterTests {
         MockitoAnnotations.openMocks(this);
         presenter = new BidSelectionPresenter(view);
         presenter.setGame(new Game());
+
+        Player.PARTNER.setOpened(false);
+        Player.USER.setOpened(false);
+        Player.LEFT_OPPONENT.setOpened(false);
+        Player.RIGHT_OPPONENT.setOpened(false);
+
+        presenter.getGame().resetBidHistory();
+    }
+
+    // WHEN: A bid is clicked onBidClicked is called.
+    // AND: This is the first bid for the team.
+    // RESULT: Updates the current players open variable.
+    @Test
+    public void testOnBidClickedSetPlayerOpener() {
+        presenter.getGame().setCurrentPlayer(Player.PARTNER);
+        presenter.onBidClicked(BidSelection.SEVEN_NO_TRUMP);
+
+        assertTrue(presenter.getGame().getOpeners().contains(Player.PARTNER));
     }
 
     // WHEN: A bid is clicked onBidClicked is called
@@ -83,13 +103,31 @@ public class BidSelectionPresenterTests {
     }
 
     // WHEN: A bid is clicked onBidClicked is called.
-    // AND: Opponents did not select a bid.
-    // RESULT: Updates partner opened
+    // AND: This is the second bid.
+    // AND: The first bid resulted in a player opening
+    // AND: the selected bid is not pass.
+    // RESULT: The current player is an opener.
     @Test
-    public void testOnBidClickedSetPlayerOpener() {
-        presenter.getGame().setCurrentPlayer(Player.PARTNER);
-        presenter.onBidClicked(BidSelection.TWO_NO_TRUMP);
+    public void testOnBidClickedResultsInPlayerOpenerSecondBid() {
 
-        assertEquals(Player.PARTNER, presenter.getGame().getOpener());
+        presenter.getGame().setCurrentPlayer(Player.USER);
+        presenter.getGame().setHand(TargetHandGenerator.createAndFillAndRandomHand());
+        presenter.onBidClicked(BidSelection.ONE_CLUB);
+        // sets user as opened. Left opponent is not current player.
+
+        presenter.onBidClicked(BidSelection.ONE_HEART);
+        // sets left opponent to opened. Partner is now current player.
+
+        presenter.onBidClicked(BidSelection.ONE_SPADE);
+        // should not set partner to opened. Right opponent is now current player.
+
+        presenter.onBidClicked(BidSelection.ONE_NO_TRUMP);
+        // should not set right opponent opened to true. User is now current player.
+
+
+        assertTrue(Player.USER.getOpened());
+        assertTrue(Player.LEFT_OPPONENT.getOpened());
+        assertFalse(Player.PARTNER.getOpened());
+        assertFalse(Player.RIGHT_OPPONENT.getOpened());
     }
 }

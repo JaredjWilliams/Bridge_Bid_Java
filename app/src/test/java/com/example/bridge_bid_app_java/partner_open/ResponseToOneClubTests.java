@@ -24,7 +24,7 @@ public class ResponseToOneClubTests {
     @Before
     public void setUp() {
         game = new Game();
-        game.setOpener(Player.PARTNER);
+        game.addOpener(Player.PARTNER);
         Player.PARTNER.addToBidHistory(BidSelection.ONE_CLUB);
         game.addBidToHistory(BidSelection.ONE_CLUB);
         bidGenerator = new BidGenerator(game);

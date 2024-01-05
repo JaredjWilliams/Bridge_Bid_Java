@@ -19,7 +19,7 @@ public class ResponseToTwoHeartTests {
     @Before
     public void setUp() {
         game = new Game();
-        game.setOpener(Player.PARTNER);
+        game.addOpener(Player.PARTNER);
         Player.PARTNER.addToBidHistory(BidSelection.TWO_HEARTS);
         game.addBidToHistory(BidSelection.TWO_HEARTS);
         bidGenerator = new BidGenerator(game);

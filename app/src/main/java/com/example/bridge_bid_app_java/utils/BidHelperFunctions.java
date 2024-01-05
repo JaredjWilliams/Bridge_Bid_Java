@@ -27,13 +27,15 @@ public class BidHelperFunctions {
     }
 
     public static boolean isOrdinalGreater(BidSelection selection) {
-        if (game.getLastBid() == null) {
+        if (game.getLastBid() == null || game.getLastBid() == BidSelection.PASS) {
             return true;
         }
+        System.out.println("compare last bid: " + game.getLastBid().ordinal() + " with current bid: " + selection.ordinal());
         return game.getLastBid().ordinal() < selection.ordinal();
     }
 
     public static boolean isTotalPointsGreaterOrEqualTo(int value) {
+        System.out.println("Helper functions: " + game.getHand());
         return game.getHand().getTotalPointCount() >= value;
     }
 

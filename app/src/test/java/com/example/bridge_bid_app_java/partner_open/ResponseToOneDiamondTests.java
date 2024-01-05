@@ -24,7 +24,7 @@ public class ResponseToOneDiamondTests {
     @Before
     public void setUp() {
         game = new Game();
-        game.setOpener(Player.PARTNER);
+        game.addOpener(Player.PARTNER);
         Player.PARTNER.addToBidHistory(BidSelection.ONE_DIAMOND);
         game.addBidToHistory(BidSelection.ONE_DIAMOND);
         bidGenerator = new BidGenerator(game);

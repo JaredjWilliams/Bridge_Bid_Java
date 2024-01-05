@@ -19,7 +19,7 @@ public class ResponseToTwoClubsTests {
     @Before
     public void setUp() {
         game = new Game();
-        game.setOpener(Player.PARTNER);
+        game.addOpener(Player.PARTNER);
         Player.PARTNER.addToBidHistory(BidSelection.TWO_CLUBS);
         game.addBidToHistory(BidSelection.TWO_CLUBS);
         bidGenerator = new BidGenerator(game);
