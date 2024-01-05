@@ -25,7 +25,7 @@ public class ResponseToOneSpadeTests {
     @Before
     public void setUp() {
         game = new Game();
-        game.setOpener(Player.PARTNER);
+        game.addOpener(Player.PARTNER);
         Player.PARTNER.addToBidHistory(BidSelection.ONE_SPADE);
         game.addBidToHistory(BidSelection.ONE_SPADE);
         bidGenerator = new BidGenerator(game);

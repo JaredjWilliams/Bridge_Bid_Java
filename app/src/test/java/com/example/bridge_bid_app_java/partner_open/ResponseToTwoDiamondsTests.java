@@ -19,7 +19,7 @@ public class ResponseToTwoDiamondsTests {
     @Before
     public void setUp() {
         game = new Game();
-        game.setOpener(Player.PARTNER);
+        game.addOpener(Player.PARTNER);
         Player.PARTNER.addToBidHistory(BidSelection.TWO_DIAMONDS);
         game.addBidToHistory(BidSelection.TWO_DIAMONDS);
         bidGenerator = new BidGenerator(game);

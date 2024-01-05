@@ -1,5 +1,6 @@
 package com.example.bridge_bid_app_java.bids;
 
+import static com.example.bridge_bid_app_java.utils.BidHelperFunctions.game;
 import static com.example.bridge_bid_app_java.utils.BidHelperFunctions.is4432or4433SplitAndAtLeast6Points;
 import static com.example.bridge_bid_app_java.utils.BidHelperFunctions.is4432or4441Split;
 import static com.example.bridge_bid_app_java.utils.BidHelperFunctions.isOrdinalGreater;
@@ -68,6 +69,9 @@ public class ResponseToOneClubDiamondBids {
         if (isOneHeartAValidResponse()) {
             return BidSelection.ONE_HEART;
         }
+        System.out.println("is one heart valid: " + isOneHeartAValidResponse());
+        System.out.println("is hearts greater than or equal to: " + isSuitAmountGreaterThanOrEqualTo(5, Suit.HEARTS));
+        System.out.println("is ordinal greater than: " + isOrdinalGreater(BidSelection.ONE_HEART));
         if (isOneDiamondAValidResponse()) {
             return BidSelection.ONE_DIAMOND;
         }
@@ -82,6 +86,7 @@ public class ResponseToOneClubDiamondBids {
     }
 
     private static boolean isOneHeartAValidResponse() {
+        System.out.println(game.getHand());
         return isTotalPointsGreaterOrEqualTo(6) &&
                 isSuitAmountGreaterThanOrEqualTo(5, Suit.HEARTS) &&
                 isOrdinalGreater(BidSelection.ONE_HEART);

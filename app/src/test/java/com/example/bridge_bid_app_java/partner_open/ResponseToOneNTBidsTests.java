@@ -20,7 +20,7 @@ public class ResponseToOneNTBidsTests {
     @Before
     public void setUp() {
         game = new Game();
-        game.setOpener(Player.PARTNER);
+        game.addOpener(Player.PARTNER);
         Player.PARTNER.addToBidHistory(BidSelection.ONE_NO_TRUMP);
         game.addBidToHistory(BidSelection.ONE_NO_TRUMP);
         bidGenerator = new BidGenerator(game);

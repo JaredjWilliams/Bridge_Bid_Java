@@ -19,7 +19,7 @@ public class ResponseToTwoSpadeTests {
     @Before
     public void setUp() {
         game = new Game();
-        game.setOpener(Player.PARTNER);
+        game.addOpener(Player.PARTNER);
         updateBids();
         bidGenerator = new BidGenerator(game);
     }

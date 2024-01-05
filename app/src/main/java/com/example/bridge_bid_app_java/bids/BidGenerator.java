@@ -85,11 +85,11 @@ public class BidGenerator {
     }
 
     private boolean didPlayerOpen(Player player) {
-        return game.getOpener() == player;
+        return game.getOpeners().contains(player);
     }
 
     private boolean didOpponentsOpen() {
-        return game.getOpener() == Player.LEFT_OPPONENT || game.getOpener() == Player.RIGHT_OPPONENT;
+        return didPlayerOpen(Player.LEFT_OPPONENT) || didPlayerOpen(Player.RIGHT_OPPONENT);
     }
 
     private boolean isBidHistoryEmpty() {

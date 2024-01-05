@@ -4,6 +4,7 @@ import android.graphics.Color;
 
 import com.example.bridge_bid_app_java.R;
 import com.example.bridge_bid_app_java.playing_cards.Suit;
+import com.example.bridge_bid_app_java.utils.CapitalizeFirstLetter;
 
 public enum BidSelection {
     ONE_CLUB(Suit.CLUBS, R.drawable.card_suit_clubs, "1", Color.WHITE, true),
@@ -69,7 +70,14 @@ public enum BidSelection {
     }
 
     public String getName() {
-        return name;
+
+        return this.name;
+    }
+
+    public String getNameOfBid() {
+        return CapitalizeFirstLetter.capitalizeFirstLetter(
+                name().replace("_", " ")
+                        .toLowerCase());
     }
 
     public int getColor() {

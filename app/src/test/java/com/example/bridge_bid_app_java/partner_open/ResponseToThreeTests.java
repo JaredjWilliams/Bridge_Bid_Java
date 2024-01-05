@@ -23,7 +23,7 @@ public class ResponseToThreeTests {
     @Before
     public void setUp() {
         game = new Game();
-        game.setOpener(Player.PARTNER);
+        game.addOpener(Player.PARTNER);
         bidGenerator = new BidGenerator(game);
     }
 

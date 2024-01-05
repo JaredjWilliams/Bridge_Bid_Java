@@ -14,7 +14,7 @@ public class Game {
     private final List<Suit> unbidSuits = new ArrayList<>(Arrays.asList(Suit.CLUBS, Suit.DIAMONDS, Suit.HEARTS, Suit.SPADES));
     private Player dealer;
     private Hand hand;
-    private Player opener;
+    private List<Player> openers = new ArrayList<>();
     private Player currentPlayer;
 
     public Game() {
@@ -23,6 +23,10 @@ public class Game {
 
     public void addBidToHistory(BidSelection bidSelection) {
         bidSelectionHistory.add(bidSelection);
+    }
+
+    public void addAllToBidHistory(List<BidSelection> bidSelections) {
+        bidSelectionHistory.addAll(bidSelections);
     }
 
     public void updateCurrentPlayer() {
@@ -72,16 +76,15 @@ public class Game {
         return unbidSuits;
     }
 
-    public static Game fromJson(String json) {
-        return new Gson().fromJson(json, Game.class);
+    public List<Player> getOpeners() {
+        return openers;
     }
 
-    public Player getOpener() {
-        return opener;
+    public void addOpener(Player player) {
+        openers.add(player);
     }
-
-    public void setOpener(Player opener) {
-        this.opener = opener;
+    public void setOpeners(List<Player> openers) {
+        this.openers = openers;
     }
 
     public Player getCurrentPlayer() {
@@ -90,5 +93,24 @@ public class Game {
 
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+    public void resetBidHistory() {
+        bidSelectionHistory.clear();
+    }
+
+    public static Game fromJson(String json) {
+        return new Gson().fromJson(json, Game.class);
+    }
+
+    @Override
+    public String toString() {
+        return "Game{" +
+                "bidSelectionHistory=" + bidSelectionHistory +
+                ", unbidSuits=" + unbidSuits +
+                ", dealer=" + dealer +
+                ", hand=" + hand +
+                ", openers=" + openers +
+                ", currentPlayer=" + currentPlayer +
+                '}';
     }
 }
