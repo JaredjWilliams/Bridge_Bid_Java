@@ -1,10 +1,16 @@
 package com.example.bridge_bid_app_java.playing_cards;
 
+import static com.example.bridge_bid_app_java.playing_cards.Suit.CLUBS;
+import static com.example.bridge_bid_app_java.playing_cards.Suit.DIAMONDS;
+import static com.example.bridge_bid_app_java.playing_cards.Suit.HEARTS;
+import static com.example.bridge_bid_app_java.playing_cards.Suit.SPADES;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public class Hand {
 
@@ -27,6 +33,7 @@ public class Hand {
     private int spades;
     private int aces;
     private int kings;
+    private int longSuitPoints;
 
     private boolean canOpen;
     private boolean canBidTwoLevel;
@@ -55,6 +62,11 @@ public class Hand {
     private void updatePointCounts() {
         calculateHCP();
         calculateDistributionPoints();
+        //Only count SSPs if you have established that you and your partner have an 8 card fit or better.
+        //If you have 4 card or better support then count SSPs as follows:
+        //5 points for a void (no cards in a suit), 3 points for a singleton and 1 point for a doubleton.
+        //If you have just 3 card support, count SSPs as follows:
+        //3 points for a void, 2 points for a singleton and 1 point for a doubleton
         calculateTotalPoints();
         calculateKings();
         calculateAces();
@@ -64,6 +76,18 @@ public class Hand {
         calculateStoppers();
         calculateAllQuickTricks();
         calculateHighCards();
+        calculateLongSuitPoints();
+        // You DO count LSPs if you are opening the bidding or if you are making a responding bid that involves a change of suit.
+        // You DON’T count LSPs if you are opening the bidding or responding with a balanced hand and making a NT bid.
+    }
+
+    private void calculateLongSuitPoints() {
+        longSuitPoints = Stream.of(SPADES, HEARTS, CLUBS, DIAMONDS)
+                .mapToInt(suit -> (int) cards.stream()
+                    .filter(card -> card.getSuit() == suit)
+                        .count() - 4)
+                .filter(excess -> excess > 0)
+                .sum();
     }
 
     private void calculateAllQuickTricks() {
@@ -72,7 +96,7 @@ public class Hand {
         total += calculateQuickTrickFor(Suit.CLUBS);
         total += calculateQuickTrickFor(Suit.DIAMONDS);
         total += calculateQuickTrickFor(Suit.HEARTS);
-        total += calculateQuickTrickFor(Suit.SPADES);
+        total += calculateQuickTrickFor(SPADES);
 
         quickTricks = total;
     }
@@ -126,7 +150,7 @@ public class Hand {
     }
 
     public void calculateStoppers() {
-        spadeStoppers.put(Suit.SPADES, (int) cards.stream().filter(card -> card == Card.ACE_SPADES || card == Card.KING_SPADES).count());
+        spadeStoppers.put(SPADES, (int) cards.stream().filter(card -> card == Card.ACE_SPADES || card == Card.KING_SPADES).count());
         heartStoppers.put(Suit.HEARTS, (int) cards.stream().filter(card -> card == Card.ACE_HEARTS || card == Card.KING_HEARTS).count());
         diamondStoppers.put(Suit.DIAMONDS, (int) cards.stream().filter(card -> card == Card.ACE_DIAMONDS || card == Card.KING_DIAMONDS).count());
         clubStoppers.put(Suit.CLUBS, (int) cards.stream().filter(card -> card == Card.ACE_CLUBS || card == Card.KING_CLUBS).count());
@@ -136,7 +160,7 @@ public class Hand {
         clubs = (int) cards.stream().filter(card -> card.getSuit() == Suit.CLUBS).count();
         diamonds = (int) cards.stream().filter(card -> card.getSuit() == Suit.DIAMONDS).count();
         hearts = (int) cards.stream().filter(card -> card.getSuit() == Suit.HEARTS).count();
-        spades = (int) cards.stream().filter(card -> card.getSuit() == Suit.SPADES).count();
+        spades = (int) cards.stream().filter(card -> card.getSuit() == SPADES).count();
     }
 
     public void calculateDistributionPoints() {
@@ -146,7 +170,7 @@ public class Hand {
                 cards.stream().filter(card -> card.getSuit() == Suit.CLUBS).count(),
                 cards.stream().filter(card -> card.getSuit() == Suit.DIAMONDS).count(),
                 cards.stream().filter(card -> card.getSuit() == Suit.HEARTS).count(),
-                cards.stream().filter(card -> card.getSuit() == Suit.SPADES).count()
+                cards.stream().filter(card -> card.getSuit() == SPADES).count()
         );
 
         for (Long distribution : distributions) {
@@ -171,7 +195,7 @@ public class Hand {
     }
 
     private void calculateHighCards() {
-        highSpades = calculateHighCardsFor(Suit.SPADES);
+        highSpades = calculateHighCardsFor(SPADES);
         highHearts = calculateHighCardsFor(Suit.HEARTS);
         highDiamonds = calculateHighCardsFor(Suit.DIAMONDS);
         highClubs = calculateHighCardsFor(Suit.CLUBS);
@@ -195,7 +219,9 @@ public class Hand {
     }
 
     private void calculateTotalPoints() {
-        totalPointCount = highCardPoints + distributionPoints;
+
+        totalPointCount = highCardPoints
+                + distributionPoints;
     }
 
     public int getTotalPointCount() {
@@ -275,6 +301,8 @@ public class Hand {
     public double getQuickTricks() {
         return quickTricks;
     }
+
+    public int getLongSuitPoints() { return longSuitPoints; }
 
     @Override
     public String toString() {

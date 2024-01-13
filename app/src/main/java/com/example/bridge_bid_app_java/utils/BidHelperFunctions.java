@@ -112,4 +112,63 @@ public class BidHelperFunctions {
     public static void setGame(Game game) {
         BidHelperFunctions.game = game;
     }
+
+    public static boolean isHighCardPointsGreaterOrEqualTo(int value) {
+        return game.getHand().getHighCardPoints() >= value;
+    }
+
+    public static BidSelection getBidSelectionFor(int number, Suit suit) {
+        return switch (suit) {
+            case CLUBS -> switch (number) {
+                case 1 -> BidSelection.ONE_CLUB;
+                case 2 -> BidSelection.TWO_CLUBS;
+                case 3 -> BidSelection.THREE_CLUBS;
+                case 4 -> BidSelection.FOUR_CLUBS;
+                case 5 -> BidSelection.FIVE_CLUBS;
+                case 6 -> BidSelection.SIX_CLUBS;
+                case 7 -> BidSelection.SEVEN_CLUBS;
+                default -> throw new IllegalStateException("Unexpected value: " + number);
+            };
+            case DIAMONDS -> switch (number) {
+                case 1 -> BidSelection.ONE_DIAMOND;
+                case 2 -> BidSelection.TWO_DIAMONDS;
+                case 3 -> BidSelection.THREE_DIAMONDS;
+                case 4 -> BidSelection.FOUR_DIAMONDS;
+                case 5 -> BidSelection.FIVE_DIAMONDS;
+                case 6 -> BidSelection.SIX_DIAMONDS;
+                case 7 -> BidSelection.SEVEN_DIAMONDS;
+                default -> throw new IllegalStateException("Unexpected value: " + number);
+            };
+            case HEARTS -> switch (number) {
+                case 1 -> BidSelection.ONE_HEART;
+                case 2 -> BidSelection.TWO_HEARTS;
+                case 3 -> BidSelection.THREE_HEARTS;
+                case 4 -> BidSelection.FOUR_HEARTS;
+                case 5 -> BidSelection.FIVE_HEARTS;
+                case 6 -> BidSelection.SIX_HEARTS;
+                case 7 -> BidSelection.SEVEN_HEARTS;
+                default -> throw new IllegalStateException("Unexpected value: " + number);
+            };
+            case SPADES -> switch (number) {
+                case 1 -> BidSelection.ONE_SPADE;
+                case 2 -> BidSelection.TWO_SPADES;
+                case 3 -> BidSelection.THREE_SPADES;
+                case 4 -> BidSelection.FOUR_SPADES;
+                case 5 -> BidSelection.FIVE_SPADES;
+                case 6 -> BidSelection.SIX_SPADES;
+                case 7 -> BidSelection.SEVEN_SPADES;
+                default -> throw new IllegalStateException("Unexpected value: " + number);
+            };
+            case NO_TRUMP -> switch (number) {
+                case 1 -> BidSelection.ONE_NO_TRUMP;
+                case 2 -> BidSelection.TWO_NO_TRUMP;
+                case 3 -> BidSelection.THREE_NO_TRUMP;
+                case 4 -> BidSelection.FOUR_NO_TRUMP;
+                case 5 -> BidSelection.FIVE_NO_TRUMP;
+                case 6 -> BidSelection.SIX_NO_TRUMP;
+                case 7 -> BidSelection.SEVEN_NO_TRUMP;
+                default -> throw new IllegalStateException("Unexpected value: " + number);
+            };
+        };
+    }
 }

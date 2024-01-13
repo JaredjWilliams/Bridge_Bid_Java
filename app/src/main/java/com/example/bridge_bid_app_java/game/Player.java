@@ -45,7 +45,6 @@ public enum Player {
     public void setOpened(Game game) {
 
         if (isGameBidHistoryGreaterThan(4, game)) {
-            System.out.println("Game bid history is greater than 4");
             return;
         }
         if (hasTeammateOfCurrentPlayerOpened(game)) {

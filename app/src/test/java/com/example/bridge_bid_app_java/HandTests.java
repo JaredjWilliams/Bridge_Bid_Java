@@ -1,5 +1,6 @@
 package com.example.bridge_bid_app_java;
 
+import static com.example.bridge_bid_app_java.utils.TargetHandGenerator.createTargetedHandWith;
 import static com.example.bridge_bid_app_java.utils.TargetHandGenerator.createTargetedHandWithAndWithout;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,6 +13,7 @@ import com.example.bridge_bid_app_java.playing_cards.Suit;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class HandTests {
 
@@ -123,6 +125,44 @@ public class HandTests {
         assertEquals(1, diamondCount);
         assertEquals(1, clubCount);
     }
+
+    // WHEN: A hand contains a suit that is longer than 4.
+    // RESULT: Adds an excess to long suit points.
+    @Test
+    public void testCalculateLongSuitPoints() {
+        List<Card> included = List.of(Card.ACE_SPADES, Card.QUEEN_SPADES, Card.TEN_SPADES, Card.SEVEN_SPADES);
+        Hand hand = createTargetedHandWith(15, 7, 5, 1, 0, included);
+
+        int longSuitPoints = hand.getLongSuitPoints();
+
+        assertEquals(4, longSuitPoints);
+    }
+
+    // WHEN: A hand contains the ace, king, queen, jack, ten of a suit
+    // RESULT: calculates the playing tricks for that suit.
+    @Test
+    public void testCalculatePlayingTricks() {
+
+        List<Double> inputList = Stream.of(7/12 ).map(this::learnByDoing).toList();
+
+
+
+        assertEquals(5, findVertex(2, -8, 20), 0);
+
+    }
+
+    public double learnByDoing(int x) {
+        return (Math.pow(x, 2) * -6) + (7 * x) - 1;
+    }
+
+    public double findAxisOfSymmetry(double a, double b) {
+        return -b/(2 * a);
+    }
+
+    public double findVertex(double a, double b, double c) {
+        return (a * Math.pow(findAxisOfSymmetry(a, b), 2) + (b * findAxisOfSymmetry(a, b)) + c);
+    }
+
 
 
 }
