@@ -1,5 +1,7 @@
 package com.example.bridge_bid_app_java.bids;
 
+import static com.example.bridge_bid_app_java.utils.BidHelperFunctions.isTotalPointsGreaterOrEqualTo;
+
 import com.example.bridge_bid_app_java.game.BidSelection;
 import com.example.bridge_bid_app_java.game.Game;
 import com.example.bridge_bid_app_java.game.Player;
@@ -10,7 +12,7 @@ public class BidGenerator {
     private final ResponseToOneClubDiamondBids oneClubDiamondBids = new ResponseToOneClubDiamondBids();
     private final ResponseToOneHeartBids oneHeartResponses = new ResponseToOneHeartBids();
     private final ResponseToTwoDiamondBid twoDiamondBids = new ResponseToTwoDiamondBid();
-    private final ResponseToThreeBid threeClubBid = new ResponseToThreeBid();
+    private final ResponseToThreeBid threeBid = new ResponseToThreeBid();
     private final ResponseToOneSpadeBids oneSpadeBids = new ResponseToOneSpadeBids();
     private final ResponseToTwoHeartBid twoHeartBids = new ResponseToTwoHeartBid();
     private final ResponseToTwoSpadeBid twoSpadeBid = new ResponseToTwoSpadeBid();
@@ -38,7 +40,7 @@ public class BidGenerator {
     }
 
     public BidSelection createRecommendedBid() {
-        if (isBidHistoryEmpty() && userCanOpen()) {
+        if (canUserOpen()) {
             return openBids.getRecommendedBid();
         }
         if (didPlayerOpen(Player.PARTNER)) {
@@ -63,7 +65,7 @@ public class BidGenerator {
             case TWO_HEARTS -> twoHeartBids.getRecommendedBid();
             case TWO_SPADES -> twoSpadeBid.getRecommendedBid();
             case TWO_NO_TRUMP -> twoNTBids.getRecommendedBid();
-            case THREE_CLUBS, THREE_DIAMONDS, THREE_HEARTS, THREE_SPADES -> threeClubBid.getRecommendedBid();
+            case THREE_CLUBS, THREE_DIAMONDS, THREE_HEARTS, THREE_SPADES -> threeBid.getRecommendedBid();
             case THREE_NO_TRUMP -> BidSelection.PASS;
             case FOUR_CLUBS -> BidSelection.PASS;
             case FOUR_DIAMONDS -> BidSelection.PASS;
@@ -82,6 +84,10 @@ public class BidGenerator {
             case SEVEN_NO_TRUMP -> BidSelection.PASS;
             default -> BidSelection.PASS;
         };
+    }
+
+    private boolean canUserOpen() {
+        return !didPlayerOpen(Player.PARTNER) && isTotalPointsGreaterOrEqualTo(13) && !didPlayerOpen(Player.USER);
     }
 
     private boolean didPlayerOpen(Player player) {

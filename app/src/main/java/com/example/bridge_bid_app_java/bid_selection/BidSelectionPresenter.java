@@ -58,7 +58,6 @@ public class BidSelectionPresenter {
     }
 
     private void setCurrentPlayerOpenBasedOn(Game game) {
-        System.out.println(game.getLastBid());
         game.getCurrentPlayer().setOpened(game);
     }
 

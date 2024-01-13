@@ -163,6 +163,22 @@ public class TargetHandGenerator {
 
         return hand;
     }
+    public static Hand createTargetedHandWithTargetedQuickTricks(double quickTricks, int totalPoints, int spades, int hearts, int diamonds, int clubs) {
+        Hand hand;
+
+        do {
+            hand = new Hand(createRandomHand());
+        } while (
+                hand.getQuickTricks() != quickTricks ||
+                        hand.getSpades() != spades ||
+                        hand.getHearts() != hearts ||
+                        hand.getDiamonds() != diamonds ||
+                        hand.getClubs() != clubs ||
+                        hand.getTotalPointCount() != totalPoints
+        );
+
+        return hand;
+    }
 
     public static Hand createTargetedHandWithAndWithout(int totalPoints, int spades, int hearts, int diamonds, int clubs, List<Card> cards, List<Card> notHeld) {
         Hand hand;
